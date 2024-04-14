@@ -560,71 +560,82 @@ function End_game(){
                 
     }
             
-            //Criar o ecrã de Game Over
-    body.style.backgroundColor = "black";
+    //Criar o ecrã de Game Over
+    body.style.backgroundImage = "url('../img/background.jpg')";
+    body.style.backgroundSize = "cover";
+    body.style.backgroundRepeat = "no-repeat";
+    body.style.color = "white";
             
-              //Texto Game Over
-    let game_over_text = document.createElement("h1");
-    game_over_text.innerHTML = "Game Over";
-    game_over_text.style.fontSize = "50px";
-    game_over_text.style.textAlign = "center";
-    game_over_text.style.top = "40%";
-    game_over_text.style.position = "absolute";
-    game_over_text.style.left = "44%";
-    body.appendChild(game_over_text);
-
-    body.style.backgroundColor = "black";
-
+              //Texto de Fim do jgo
+    let end_game_text = document.createElement("h1");
+    end_game_text.innerHTML = "Your Hunt is Over";
+    end_game_text.style.fontSize = "50px";
+    end_game_text.style.textAlign = "center";
+    end_game_text.style.top = "40%";
+    end_game_text.style.position = "absolute";
+    end_game_text.style.left = "40%";
+    body.appendChild(end_game_text);
 
     // Novo texto de score
-    var score_text = document.createElement("h1");
+    let score_text = document.createElement("h1");
     score_text.innerHTML = " Your score: " + score;
     score_text.style.position = "absolute";
     score_text.style.top = "55%";
     score_text.style.left = "45%";
 
-            body.appendChild(score_text);
+   
+
+    
+    let buttons = document.createElement("div");
+    buttons.style.position = "absolute";
+    buttons.style.display = "flex";
+    buttons.style.justifyContent = "center";
+    buttons.style.margin = "20px";
+    buttons.style.flexDirection = "column";
+    buttons.style.alignItems = "center";
+    buttons.style.top = "70%";
+    buttons.style.left = "45%";
+
+    body.appendChild(buttons);
+
+
+    let buttons_class = document.createElement("style");
+    document.head.appendChild(buttons_class);
+    
+    //Confuguração da classe dos botões
+    buttons_class.sheet.insertRule(".buttons {width: 200px; height: 50px; background-color: #EE0000; color: white; font-size: 20px; border: none; cursor: pointer; border-radius: 5px; margin: 10px;}", 0);
+    
+    //Configuração do hover da classe dos botões
+    buttons_class.sheet.insertRule(".buttons:hover {background-color: black; color: #EE0000; transform: scale(1.1); transition: 0.5s;}", 1);
 
 
     //Botão para voltar ao menu
-    var back_menu = document.createElement("button");
-
-    back_menu.innerHTML = "Back to Menu";
-    back_menu.style.width = "200px";
-    back_menu.style.height = "50px";
-    back_menu.style.backgroundColor = "red";
-    back_menu.style.color = "white";
-    back_menu.style.fontSize = "20px";
-    back_menu.style.border = "none";
-    back_menu.style.cursor = "pointer";
-    back_menu.style.borderRadius = "5px";
-    back_menu.style.position = "absolute";
-    back_menu.style.top = "70%";
-    back_menu.style.left = "45%";
-
-
+    let play_again = document.createElement("button");
+    play_again.className = "buttons";
+    play_again.innerHTML = "Play Again";
+    
+   
      //Quando o utilizador carrega no botão
+    play_again.onclick = function() {
+       location.reload();
+    }
+
+ 
+             
+    buttons.appendChild(play_again);
+
+
+    let back_menu = document.createElement("button");
+    back_menu.className = "buttons";
+    back_menu.innerHTML = "Back to Menu";
+
     back_menu.onclick = function() {
         window.location.href = "../index.html";
     }
 
-    //Hover
-    back_menu.onmouseover = function() {
-        this.style.backgroundColor = "white";
-        this.style.color = "#EE0000";
-        this.style.transform = "scale(1.1)";
-        this.style.transition = "0.5s";
+    buttons.appendChild(back_menu);
 
-    }
-
-    back_menu.onmouseout = function() {
-        this.style.backgroundColor = "#EE0000";
-        this.style.color = "white";
-        this.style.transition = "0.5s";
-        this.style.transform = "scale(1)";
-    }
-             
-    body.appendChild(back_menu);
+    body.appendChild(score_text);
 
 
 }
