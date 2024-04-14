@@ -5,15 +5,26 @@ body {
     text-shadow: 5px 5px #191C1F; /* Sombra preta */
     @import url("https://fonts.cdnfonts.com/css/chinese-rocks");
     font-family: 'Chinese Rocks Rg', sans-serif;
-    background-image: url('../img/journal.jpg');
+    background-image: url('../img/controls.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
+   
 }
 
-#instructions{
+#controls{
     position: absolute;
-    top: 40%;
-    left: 10%;
+    top: 5%;
+    left: 20%;
     font-size: 50px;
     background-size: cover;
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+    align-items: left;
+    color: #222; /* Cor da tinta */
+    text-shadow: none;
    
 }
 
@@ -36,4 +47,21 @@ body {
     opacity: 1;
     transform: scale(1.1);
     transition: 0.5s;
+}
+
+
+h4{
+    margin-bottom: 1px;
+ 
+}
+
+ul{
+  margin-top: 5px;
+}
+li{
+    list-style-type: none;
+    margin: 10px;
+    padding: 10px;
+   
+    font-size: 20px;
 }
