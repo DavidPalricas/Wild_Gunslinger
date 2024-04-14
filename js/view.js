@@ -282,6 +282,7 @@ document.addEventListener('click', onDocumentClick, false);
 
 
 function init() {
+    Loading_Screen();
     helper.initEmptyScene(sceneElements);
     scene.load3DObjects(sceneElements.sceneGraph);
     requestAnimationFrame(computeFrame);
@@ -411,6 +412,23 @@ function Change_Level(){
 
     //Cria a cena do próximo nível
     scene.load3DObjects(sceneElements.sceneGraph);
+
+}
+
+function Loading_Screen(){
+    let progress_bar = document.getElementById("progress-bar");
+    let progress = 0;
+    
+    let interval = setInterval(function() {
+        progress += 10;
+        progress_bar.value = progress;
+        progress_bar.style.color = "red";
+        if (progress >= 100) {
+            clearInterval(interval);
+            let loading = document.getElementsByClassName("progress-bar-container")[0];
+            loading.style.display = "none";
+        }
+    }, 100);
 
 }
 
