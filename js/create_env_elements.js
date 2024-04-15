@@ -19,6 +19,10 @@ export function create_Env_models(model,level){
         case "bush":
             model = createBush();
             break;
+
+        case "cactus":
+            model = createCactus();
+            break;
         default:
             break;
     }
@@ -171,6 +175,26 @@ function createBush() {
 
     return bush;
 }
+
+function createCactus() {
+    const body_geometry = new THREE.CapsuleGeometry(1.5, 10);
+    const body_material = new THREE.MeshPhongMaterial({ color: 0x228B22 });
+    const body = createMesh(body_geometry, "cactus.jpg");
+
+    body.castShadow = true;
+    body.name = "cactus_body";
+    body.position.y = 5;
+
+   
+
+    console.log(body.children);
+
+    const cactus = new THREE.Group();
+    cactus.add(body);
+
+    return cactus;
+}
+
 
 
 function createMesh(geom, imageFile) {

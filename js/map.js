@@ -38,7 +38,8 @@ let ANIMALS= [{"duck":[50,25, 0]},
 const LEVEL1 = [CONFIG,ENV_OBJECTS, ANIMALS];
 
 
-ANIMALS = [ANIMALS[0],ANIMALS[1]]
+ANIMALS = [{"boar":[300, 0, 0]},
+           {"vulture":[50, 25, 0]},];
 
 
 ENV_OBJECTS  = [ {"plane":[15, 0, 0]},
@@ -48,7 +49,14 @@ ENV_OBJECTS  = [ {"plane":[15, 0, 0]},
                 {"rock":[30, 0, -60],"scale":1},
                 {"rock":[140, 0, -120],"scale":2.5},
                 {"rock":[280, 0, 120],"scale":1.5},
-                {"rock":[180, 0, 160],"scale":1.5},];
+                {"rock":[180, 0, 160],"scale":1.5},
+                {"cactus":[100, 0, 0],"scale":1.5},
+                {"cactus":[40, 0, 70],"scale":2},
+                {"cactus":[80, 0, -70],"scale":1.3},
+                {"cactus":[100, 0, 50],"scale":1.4},
+                {"cactus":[240, 0, 140],"scale":2},
+                {"cactus":[320, 0, 170],"scale":1.3},
+                {"cactus":[300, 0, -100],"scale":1.5},];
 
 CONFIG = [{"bullets": 4}]
 

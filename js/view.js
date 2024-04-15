@@ -11,6 +11,7 @@ import { OrbitControls } from "three/addons/controls/OrbitControls.js";;
 
 let n_bullets;
 let level = 1;
+let time = 30;
 const mode = "view"
 
 const ANIMALS_LEVEL = [];
@@ -149,6 +150,7 @@ const scene = {
         let tree_id = 0;
         let rock_id = 0;
         let bush_id = 0;
+        let cactus_id = 0;
         let scale = 0;
         
          //Adicionar elementos ao ambiente
@@ -182,6 +184,15 @@ const scene = {
                     element_model.name = "bush" + bush_id;
                     bush_id++;
                     break;
+
+                case "cactus":
+                    element_model = create_Env_models(element_name);
+                    element_model.name = "cactus" + cactus_id;
+                    cactus_id++;
+                    break;
+
+                default:
+                    break;
             }
 
                //Modar a escla dos elementos repetidos
@@ -201,6 +212,7 @@ const scene = {
         let duck_id = 1;
         let fox_id = 1;
         let boar_id = 1;
+        let vulture_id = 1;
         
         animals_count = ANIMALS.length;
            //Adicionar animais á cena
@@ -234,6 +246,15 @@ const scene = {
                     boar_id++;
     
                     break;
+
+                case "vulture":
+                    animal_model = create_Animal_Model(animal_name);
+                    animal_model.rotation.y = 0.5 * Math.PI;
+                    animal_model.name = animal_name + vulture_id;
+                    vulture_id++;
+                    break;
+
+
               }
     
           
@@ -264,7 +285,7 @@ function computeFrame(time) {
     ANIMALS_LEVEL.forEach(animal => {
         const animal_model = sceneElements.sceneGraph.getObjectByName(animal);
        
-        if (animal_model != undefined) {
+        if (animal_model != undefined ) {
             animate_animal(animal_model,delta);
         }
         
@@ -373,6 +394,13 @@ function animate_animal(animal,delta){
         right_wing.rotation.z = -Math.sin(delta * 1.3) * Math.PI / 8;
 
         
+    }else if (animal.name.includes("vulture")) {
+        const left_wing = animal.getObjectByName("vulture_left_wing");
+        const right_wing = animal.getObjectByName("vulture_right_wing");
+
+        //Animação das asas
+        left_wing.rotation.z = Math.sin(delta * 1.3) * Math.PI / 8;
+        right_wing.rotation.z = -Math.sin(delta * 1.3) * Math.PI / 8;
     }
 
         

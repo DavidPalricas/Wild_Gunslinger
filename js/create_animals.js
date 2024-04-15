@@ -12,6 +12,10 @@ export function create_Animal_Model(model){
         model = createBoar();
         break;
 
+    case "vulture":
+        model = createVulture();
+        break;
+
     default:
         break;
    }
@@ -597,6 +601,128 @@ function createBoar() {
 
     return boar;
 
+
+}
+
+
+function createVulture(){
+    const feathers_color= 0x654321; // Castanho escuro
+    const  body_color = 0xD3D3D3; // Cinzento
+    //Cabeça do abutre
+    const head_geometry = new THREE.SphereGeometry(1.6);
+    const head_material = new THREE.MeshPhongMaterial({ color: body_color  }); // Preto
+    const head = new THREE.Mesh(head_geometry, head_material);
+    head.name = "vulture_head";
+    head.castShadow = true;
+
+    //Olhos do abutre
+    const left_eye_geometry = new THREE.SphereGeometry(0.4);
+    const left_eye_material = new THREE.MeshPhongMaterial({ color: 0xFFFFFF }); // Branco
+    const left_eye = new THREE.Mesh(left_eye_geometry, left_eye_material);
+    left_eye.castShadow = true;
+    left_eye.name = "vulture_left_eye";
+    const right_eye = left_eye.clone();
+    right_eye.name = "vulture_right_eye";
+
+    //Iris do abutre
+    const left_iris_geometry = new THREE.SphereGeometry(0.3);
+    const left_iris_material = new THREE.MeshPhongMaterial({ color: 0x000000 }); // Preto
+    const left_iris = new THREE.Mesh(left_iris_geometry, left_iris_material);
+    left_iris.name = "vulture_left_iris";
+    left_iris.castShadow = true;
+    const right_iris = left_iris.clone();
+    right_iris.name = "vulture_right_iris";
+
+    //Bico do abutre
+    const beek_geometry = new THREE.BoxGeometry(1.5, 1.5, 0.5);
+    const beek_material = new THREE.MeshPhongMaterial({ color: 0x080808  }); // Negro
+    const beek = new THREE.Mesh(beek_geometry, beek_material);
+    beek.name = "vulture_beek";
+    beek.castShadow = true;
+
+    //Corpo do abutre
+    const body_geometry = new THREE.CapsuleGeometry(1.3, 2);
+    const body_material = new THREE.MeshPhongMaterial({ color: feathers_color }); // Preto
+    const body = new THREE.Mesh(body_geometry, body_material);
+    body.name = "vulture_body";
+    body.castShadow = true;
+
+    //Asas do abutre
+    const left_wing_geometry = new THREE.BoxGeometry(0.5, 5, 1);
+    const left_wing_material = new THREE.MeshPhongMaterial({ color: feathers_color }); // Preto
+    const left_wing = new THREE.Mesh(left_wing_geometry, left_wing_material);
+    left_wing.name = "vulture_left_wing";
+    left_wing.castShadow = true;
+    const right_wing = left_wing.clone();
+    right_wing.name = "vulture_right_wing";
+
+
+    // Pernas  do abutre
+    const left_leg_geometry = new THREE.CylinderGeometry(0.4, 0.4, 3);
+    const left_leg_material = new THREE.MeshPhongMaterial({ color: body_color }); // Laranja
+    const left_leg = new THREE.Mesh(left_leg_geometry, left_leg_material);
+    left_leg.name = "vulture_left_leg";
+    left_leg.castShadow = true;
+    const right_leg = left_leg.clone();
+    right_leg.name = "vulture_right_leg";
+
+
+    // Definir a posição e orientação dos diferentes elementos do abutre
+    body.position.set(0, 10, 0);
+    body.rotation.z = -0.5 * Math.PI;
+
+    head.position.set(body.position.x + 2.3, body.position.y , body.position.z);
+
+    left_eye.position.set(head.position.x - 1.5, head.position.y - 9.5 , head.position.z + 1);
+    right_eye.position.set(head.position.x -1.5 , head.position.y -9.5  , head.position.z- 1);
+
+    left_iris.position.set(left_eye.position.x - 0.7 , left_eye.position.y - 0.4 , left_eye.position.z -1 );
+    right_iris.position.set(right_eye.position.x -0.7, right_eye.position.y -0.4 , right_eye.position.z + 1 );
+
+    beek.rotation.x = 0.5 * Math.PI;
+    beek.position.set(head.position.x - 1, head.position.y - 10.5, head.position.z);
+
+    left_wing.position.set(body.position.x, body.position.y - 10, body.position.z + 2);
+    left_wing.rotation.x = 0.6 * Math.PI;
+    right_wing.position.set(body.position.x, body.position.y -10, body.position.z - 2);
+    right_wing.rotation.x = 0.4 * Math.PI;
+
+    left_leg.position.set(body.position.x , body.position.y - 13, body.position.z + 0.8);
+    left_leg.rotation.y = 0.5 * Math.PI;
+    right_leg.position.set(body.position.x , body.position.y - 13, body.position.z - 0.8);
+    right_leg.rotation.y = 0.5 * Math.PI;
+
+
+
+
+
+    const vulture = new THREE.Group();
+    vulture.add(body);
+    vulture.add(head);
+    head.add(left_eye);
+    head.add(right_eye);
+    head.add(beek);
+    left_eye.add(left_iris);
+    right_eye.add(right_iris);
+    body.add(left_wing);
+    body.add(right_wing);
+    body.add(left_leg);
+    body.add(right_leg);
+
+    vulture.castShadow = true;
+
+
+    // Prpriedades usadas no movimento do abutre
+
+    vulture.alive = true;
+    vulture.speed = 1.1;
+    vulture.step = -0.08;
+    vulture.dist = 0; // Distância percorrida pelo pato
+    vulture.rotate = 0.5 * Math.PI; // Rotação do pato para inversão do sentido de movimento
+
+
+    return vulture;
+  
 
 }
 

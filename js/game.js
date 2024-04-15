@@ -45,6 +45,11 @@ let animals_count_text = document.getElementById("animals_count");
 let camera_look = 0;
 
 
+let game_time= 30;
+
+let show_time = document.getElementById("timer");
+
+
 const sceneElements = {
     sceneGraph: null,
     camera: null,
@@ -57,6 +62,7 @@ const sceneElements = {
 const helper = {
     initEmptyScene: function(sceneElements) {
         sceneElements.sceneGraph = new THREE.Scene(); // Cria a cena
+        sceneElements.sceneGraph.name = "sceneGraph";
 
         const width = window.innerWidth;
         const height = window.innerHeight;
@@ -185,6 +191,7 @@ const scene = {
         let tree_id = 0;
         let rock_id = 0;
         let bush_id = 0;
+        let cactus_id = 0;
         let scale = 0;
          //Adicionar elementos ao ambiente
          for(let i = 0; i < ENV_ELEMENTS.length; i++){
@@ -216,8 +223,17 @@ const scene = {
                     element_model = create_Env_models(element_name);
                     element_model.name = "bush" + bush_id;
                     bush_id++;
-                    console.log(element_model.name);
                     break;
+
+                case "cactus":
+                    element_model = create_Env_models(element_name);
+                    element_model.name = "cactus" + cactus_id;
+                    cactus_id++;
+                    break;
+                       
+    
+                default:
+                     break;
             }
 
                //Modar a escla dos elementos repetidos
@@ -238,6 +254,7 @@ const scene = {
         let duck_id = 1;
         let fox_id = 1;
         let boar_id = 1;
+        let vulture_id = 1;
            //Adicionar animais á cena
        for(let i = 0; i < animals_count; i++){
               const animal = ANIMALS[i];
@@ -269,6 +286,13 @@ const scene = {
                     boar_id++;
     
                     break;
+
+                case "vulture":
+                    animal_model = create_Animal_Model(animal_name);
+                    animal_model.rotation.y = 0.5 * Math.PI;
+                    animal_model.name = animal_name + vulture_id;
+                    vulture_id++;
+                    break;
               }
     
           
@@ -294,12 +318,15 @@ const scene = {
 
 var delta = 0;
 
-function computeFrame(time) {
+function computeFrame(time) { 
     delta += 0.08;
   
     //Revolver segue o rato
     if (gun_grabbed == true) {
-        move_Revoler();  
+        move_Revoler();
+
+
+        
     }
 
     ANIMALS_LEVEL.forEach(animal => {
@@ -395,6 +422,9 @@ function init() {
 
 function Grab_Gun() {
     gun_grabbed = true;
+
+    createTimer();
+
     var element = document.getElementById("instruction");
     element.parentNode.removeChild(element)
 
@@ -456,6 +486,9 @@ function fire_gun(event) {
 
         if (animals_count == 0) {
             level++;
+
+            //Adicionar tempo extra ao passar de nível
+            game_time += 10;
     
             if (level > MAP.length) {
                 End_game();
@@ -512,32 +545,35 @@ function play_theme(){
 function shoot(){
     let intersects = raycaster.intersectObjects(sceneElements.sceneGraph.children, true);
     let target = intersects[0];
-    if (target.object.name.includes("boar")) {
-        console.log("Boar shot");
-        shoot_animal("boar");
+    let animal_hunted;
 
- 
-        const boar = sceneElements.sceneGraph.getObjectByName(target.object.parent.name);
-        sceneElements.sceneGraph.remove(boar);
-
+    const All_Animals = ["boar", "fox", "duck", "vulture"];
+    
+    for (let i = 0; i < All_Animals.length; i++) {
+        if (target.object.name.includes(All_Animals[i])) {
+            animal_hunted = All_Animals[i];
+            break;
+        }
+        else if (i == All_Animals.length - 1) {
+            return; //Se o target não for um animal, sai da função
+        }
+        
     }
 
-    else if (target.object.name.includes("fox")) {
-        console.log("Fox shot");
-        shoot_animal("fox"); 
-        const fox = sceneElements.sceneGraph.getObjectByName(target.object.parent.name);
-        sceneElements.sceneGraph.remove(fox);
-    }
+    shoot_animal(animal_hunted);
 
-    else if (target.object.name.includes("duck")) {
-        console.log("Duck shot");
-        shoot_animal("duck");
-        const duck = sceneElements.sceneGraph.getObjectByName(target.object.parent.name);
-        sceneElements.sceneGraph.remove(duck);
-    }
-  
-    }
-  
+    let animal_killed = target.object.parent;
+    while(true){
+        if (animal_killed.parent.name == "sceneGraph") {
+            break;
+        }
+        animal_killed = animal_killed.parent;
+    };
+
+    sceneElements.sceneGraph.remove(animal_killed);
+
+    
+} 
 
 function End_game(){
     //Parar a música de fundo
@@ -756,6 +792,9 @@ function shoot_animal(animal){
             animal_death_sound += "duck_death.mp3";
             break;
 
+        case "vulture":
+            animal_death_sound += "vulture_death.mp3";
+            break;
         default:
             break;
 
@@ -779,8 +818,8 @@ function shoot_animal(animal){
         });
         
         //Atualizar o score e o número de animais
-
-        score += 100;
+        
+        score += 100 + game_time; //Fórmula de cálculo do score
         animals_count--;
 
         
@@ -807,6 +846,14 @@ function animate_animal(animal,delta){
         right_wing.rotation.z = -Math.sin(delta * 1.3) * Math.PI / 8;
 
         
+    }
+    else if (animal.name.includes("vulture")) {
+        const left_wing = animal.getObjectByName("vulture_left_wing");
+        const right_wing = animal.getObjectByName("vulture_right_wing");
+
+        //Animação das asas
+        left_wing.rotation.z = Math.sin(delta * 1.3) * Math.PI / 8;
+        right_wing.rotation.z = -Math.sin(delta * 1.3) * Math.PI / 8;
     }
 
         
@@ -905,6 +952,20 @@ function Loading_Screen(){
         }
     }, 80);
 
+}
+
+
+function createTimer(){
+    let timer = setInterval(function() {
+       
+        game_time--;
+        show_time.innerHTML = game_time +"s ";
+        if (game_time == 0) {
+            clearInterval(timer);
+            Game_Over();
+         
+        }
+    }, 1000);
 }
 
 
