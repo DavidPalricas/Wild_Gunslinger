@@ -852,8 +852,8 @@ function animate_animal(animal,delta){
         const right_wing = animal.getObjectByName("vulture_right_wing");
 
         //Animação das asas
-        left_wing.rotation.z = Math.sin(delta * 1.3) * Math.PI / 8;
-        right_wing.rotation.z = -Math.sin(delta * 1.3) * Math.PI / 8;
+        left_wing.rotation.z = Math.sin(delta * 0.4) * Math.PI / 8;
+        right_wing.rotation.z = -Math.sin(delta * 0.4) * Math.PI / 8;
     }
 
         

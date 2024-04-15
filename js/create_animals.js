@@ -718,7 +718,7 @@ function createVulture(){
     vulture.speed = 1.1;
     vulture.step = -0.08;
     vulture.dist = 0; // Distância percorrida pelo pato
-    vulture.rotate = 0.5 * Math.PI; // Rotação do pato para inversão do sentido de movimento
+    vulture.rotate = -0.5 * Math.PI; // Rotação do pato para inversão do sentido de movimento
 
 
     return vulture;
