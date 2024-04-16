@@ -255,6 +255,7 @@ const scene = {
         let fox_id = 1;
         let boar_id = 1;
         let vulture_id = 1;
+        let coyote_id = 1;
            //Adicionar animais á cena
        for(let i = 0; i < animals_count; i++){
               const animal = ANIMALS[i];
@@ -292,6 +293,14 @@ const scene = {
                     animal_model.rotation.y = 0.5 * Math.PI;
                     animal_model.name = animal_name + vulture_id;
                     vulture_id++;
+                    break;
+
+                case "coyote":
+                    animal_model = create_Animal_Model(animal_name);
+                    animal_model.rotation.y = 0.5 * Math.PI;
+                    animal_model.name = animal_name + coyote_id;
+                    coyote_id++;
+            
                     break;
               }
     
@@ -547,7 +556,7 @@ function shoot(){
     let target = intersects[0];
     let animal_hunted;
 
-    const All_Animals = ["boar", "fox", "duck", "vulture"];
+    const All_Animals = ["boar", "fox", "duck", "vulture","coyote"];
     
     for (let i = 0; i < All_Animals.length; i++) {
         if (target.object.name.includes(All_Animals[i])) {
@@ -778,28 +787,8 @@ function game_over_theme(){
 
 
 function shoot_animal(animal){
-    let animal_death_sound = "../sounds/";
-    switch(animal){
-        case "boar":
-            animal_death_sound += "boar_death.mp3";
-            break;
 
-        case "fox":
-            animal_death_sound += "fox_death.mp3";
-            break;
-
-        case "duck":
-            animal_death_sound += "duck_death.mp3";
-            break;
-
-        case "vulture":
-            animal_death_sound += "vulture_death.mp3";
-            break;
-        default:
-            break;
-
-    }
-
+    let animal_death_sound = "../sounds/" + animal + "_death.mp3";
 
     if (animal_death_sound != "../sounds/") {
 
@@ -837,23 +826,43 @@ function animate_animal(animal,delta){
     animal.dist = animal.position.z - animal.initial_pos;
 
      
-    if (animal.name.includes("duck")) {
-        const left_wing = animal.getObjectByName("duck_left_wing");
-        const right_wing = animal.getObjectByName("duck_right_wing");
+    if (animal.name.includes("duck") || animal.name.includes("vulture")) {
+        let animal_name = animal.name.includes("duck") ? "duck" : "vulture";
+
+        const left_wing = animal.getObjectByName(animal_name + "_left_wing");
+        const right_wing = animal.getObjectByName(animal_name + "_right_wing");
 
         //Animação das asas
-        left_wing.rotation.z = Math.sin(delta * 1.3) * Math.PI / 8;
-        right_wing.rotation.z = -Math.sin(delta * 1.3) * Math.PI / 8;
+        left_wing.rotation.z = Math.sin(delta * animal.wing_speed) * animal.wing_amplitude;
+        right_wing.rotation.z = - Math.sin(delta * animal.wing_speed) * animal.wing_amplitude;
 
         
-    }
-    else if (animal.name.includes("vulture")) {
-        const left_wing = animal.getObjectByName("vulture_left_wing");
-        const right_wing = animal.getObjectByName("vulture_right_wing");
+    } else if (animal.name.includes("fox") || animal.name.includes("coyote")) {
+         
 
-        //Animação das asas
-        left_wing.rotation.z = Math.sin(delta * 0.4) * Math.PI / 8;
-        right_wing.rotation.z = -Math.sin(delta * 0.4) * Math.PI / 8;
+        let animal_name = animal.name.includes("fox") ? "fox" : "coyote";
+
+        // Animação da cauda
+        const tail = animal.getObjectByName(animal_name + "_tail");
+        tail.rotation.x = Math.sin(delta * animal.tail_speed) * animal.tail_amplitude;
+
+
+    
+
+        const front_left_leg = animal.getObjectByName(animal_name + "_front_left_leg");
+        const front_right_leg = animal.getObjectByName(animal_name + "_front_right_leg");
+        const back_left_leg = animal.getObjectByName(animal_name + "_back_left_leg");
+        const back_right_leg = animal.getObjectByName(animal_name + "_back_right_leg");
+        
+        
+        front_left_leg.rotation.z= Math.sin(delta * animal.leg_speed) *  animal.leg_amplitude;
+        front_right_leg.rotation.z = -Math.sin(delta * animal.leg_speed) * animal.leg_amplitude;
+        back_left_leg.rotation.z = -Math.sin(delta * animal.leg_speed) * animal.leg_amplitude;
+        back_right_leg.rotation.z = Math.sin(delta * animal.leg_speed) * animal.leg_amplitude;
+
+
+
+
     }
 
         
@@ -868,7 +877,6 @@ function animate_animal(animal,delta){
 
             animal.rotation.y = -animal.rotate; 
         }
-   
 }
 
 

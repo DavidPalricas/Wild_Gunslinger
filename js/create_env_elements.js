@@ -185,10 +185,6 @@ function createCactus() {
     body.name = "cactus_body";
     body.position.y = 5;
 
-   
-
-    console.log(body.children);
-
     const cactus = new THREE.Group();
     cactus.add(body);
 

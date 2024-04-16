@@ -30,7 +30,7 @@ let ENV_OBJECTS = [ {"plane":[15, 0, 0]},
 let ANIMALS= [{"duck":[50,25, 0]},
                 {"fox":[120, 0, 50]},
                 {"boar":[300, 0, -100]},
-                {"duck":[40, 25, 80]},]
+                {"duck":[40, 25, 80]},];
 
 
 
@@ -39,7 +39,8 @@ const LEVEL1 = [CONFIG,ENV_OBJECTS, ANIMALS];
 
 
 ANIMALS = [{"boar":[300, 0, 0]},
-           {"vulture":[50, 25, 0]},];
+           {"vulture":[50, 25, 0]},
+           {"coyote":[70, 0, 0]},];
 
 
 ENV_OBJECTS  = [ {"plane":[15, 0, 0]},

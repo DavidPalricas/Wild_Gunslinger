@@ -16,6 +16,10 @@ export function create_Animal_Model(model){
         model = createVulture();
         break;
 
+    case "coyote":
+        model = createCoyote();
+        break;
+
     default:
         break;
    }
@@ -150,7 +154,8 @@ function createDuck() {
 
         duck.rotate = 0.5 * Math.PI; // Rotação do pato para inversão do sentido de movimento
 
-
+        duck.wing_amplitude = Math.PI/8; // Amplitude do movimento das asas do pato
+        duck.wing_speed = 1.3; // Velocidade do movimento das asas do pato
 
 
     
@@ -230,7 +235,7 @@ function createFox() {
     right_ear.name = "fox_right_ear";
 
     //Boca da raposa
-    const mouth_geometry = new THREE.BoxGeometry(1, 2, 1);
+    const mouth_geometry = new THREE.BoxGeometry(1, 1, 1);
     const mouth_material = new THREE.MeshPhongMaterial({ color: 0x000000 }); // Preto
     const mouth = new THREE.Mesh(mouth_geometry, mouth_material);
     mouth.name = "fox_mouth";
@@ -264,6 +269,7 @@ function createFox() {
     const front_left_leg = new THREE.Mesh(front_left_leg_geometry, front_left_leg_material);
     front_left_leg.name = "fox_front_left_leg";
     front_left_leg.castShadow = true;
+    front_left_leg.rotation.z = 0.5 * Math.PI;
     const front_right_leg = front_left_leg.clone();
     front_right_leg.name = "fox_front_right_leg";
     const back_left_leg = front_left_leg.clone();
@@ -285,95 +291,100 @@ function createFox() {
     back_right_paw.name = "fox_back_right_paw";
 
 
-    body.position.set(0, 4, 0);
+    body.position.set(0, 3.5, 0);
     body.rotation.z = -0.5 * Math.PI;
 
 
     head.position.set(body.position.x + 3, body.position.y, body.position.z);
 
-    lower_face.position.set(head.position.x + 0.5, head.position.y - 0.7, head.position.z);
+    lower_face.position.set(head.position.x -2.5 , head.position.y - 4, head.position.z);
     lower_face.rotation.x = -0.5 * Math.PI;
 
 
-    left_eyebrow.position.set(head.position.x + 1, head.position.y + 1.5, head.position.z + 1);
+    left_eyebrow.position.set(head.position.x -1.9, head.position.y - 2, head.position.z + 0.8);
     left_eyebrow.rotation.z = 0.2 * Math.PI;
-    right_eyebrow.position.set(head.position.x + 1, head.position.y + 1.5, head.position.z - 1);
+    right_eyebrow.position.set(head.position.x -1.9, head.position.y -2, head.position.z - 0.8);
     right_eyebrow.rotation.z = 0.2 * Math.PI;
 
-    left_eye.position.set(head.position.x + 1.1, head.position.y + 0.7, head.position.z + 0.8);
-    right_eye.position.set(head.position.x + 1.1, head.position.y + 0.7, head.position.z - 0.8);
+    left_eye.position.set(head.position.x -1.8 , head.position.y -2.9, head.position.z + 0.8);
+    right_eye.position.set(head.position.x -1.8, head.position.y -2.9, head.position.z - 0.8);
 
-    left_iris.position.set(left_eye.position.x + 0.3, left_eye.position.y + 0.2, left_eye.position.z + 0.1);
-    right_iris.position.set(right_eye.position.x + 0.3, right_eye.position.y + 0.2, right_eye.position.z - 0.1);
+    left_iris.position.set(left_eye.position.x - 0.8, left_eye.position.y -0.5, left_eye.position.z - 0.7); ;
+    right_iris.position.set(right_eye.position.x- 0.8 , right_eye.position.y -0.5, right_eye.position.z + 0.7 );
 
-    snout.position.set(head.position.x + 1, head.position.y + 0.2, head.position.z);
+    snout.position.set(head.position.x -1.4, head.position.y  - 3.5, head.position.z);
     snout.rotation.z = 0.5 * Math.PI;
 
-    nose.position.set(snout.position.x + 2, snout.position.y, snout.position.z);
-    nose.rotation.z = 0.5 * Math.PI;
+    nose.position.set(snout.position.x -1.58, snout.position.y -2 , snout.position.z);
+    nose.rotation.y = 0.5 * Math.PI;
 
-    left_ear.position.set(head.position.x, head.position.y + 1.7, head.position.z + 1.7);
+    left_ear.position.set(head.position.x -2.5, head.position.y -1.5 , head.position.z + 1.25);
     left_ear.rotation.y = -0.4 * Math.PI;
-    right_ear.position.set(head.position.x, head.position.y + 1.7, head.position.z - 1.4);
+    right_ear.position.set(head.position.x-2.7, head.position.y -1.5, head.position.z - 1.2);
     right_ear.rotation.y = -0.4 * Math.PI;
 
-    mouth.position.set(lower_face.position.x + 0.9, lower_face.position.y, lower_face.position.z);
+    mouth.position.set(lower_face.position.x + 0.9 , lower_face.position.y - 0.7, lower_face.position.z);
     mouth.rotation.z = 0.7 * Math.PI;
 
-    tail.position.set(body.position.x - 3, body.position.y + 1, body.position.z);
-    tail.rotation.z = 0.3 * Math.PI;
+    tail.position.set(body.position.x -2, body.position.y -7.9, body.position.z);
+    tail.rotation.z = 0.8 * Math.PI;
 
-    tail_tip.position.set(tail.position.x - 2, tail.position.y + 1.6, tail.position.z);
-    tail_tip.rotation.z = 0.3 * Math.PI;
+    tail_tip.position.set(tail.position.x + 2, tail.position.y + 6.9, tail.position.z);
+  
 
 
-    front_left_leg.position.set(body.position.x + 1.5, body.position.y - 2, body.position.z + 1);
-    front_right_leg.position.set(body.position.x + 1, body.position.y - 2, body.position.z - 1);
-    back_left_leg.position.set(body.position.x - 1.5, body.position.y - 2, body.position.z + 1);
-    back_right_leg.position.set(body.position.x - 1.5, body.position.y - 2, body.position.z - 1);
+    front_left_leg.position.set(body.position.x + 2, body.position.y-2, body.position.z + 1);
+    front_right_leg.position.set(body.position.x + 2, body.position.y - 2, body.position.z - 1);
 
-    front_left_paw.position.set(front_left_leg.position.x, front_left_leg.position.y - 1, front_left_leg.position.z);
-    front_right_paw.position.set(front_right_leg.position.x, front_right_leg.position.y - 1, front_right_leg.position.z);
-    back_left_paw.position.set(back_left_leg.position.x, back_left_leg.position.y - 1, back_left_leg.position.z);
-    back_right_paw.position.set(back_right_leg.position.x, back_right_leg.position.y - 1, back_right_leg.position.z);
+    back_left_leg.position.set( front_left_leg.position.x , -front_left_leg.position.y,front_left_leg.position.z );
+    back_right_leg.position.set(front_right_leg.position.x, -front_right_leg.position.y, front_right_leg.position.z);
+
+    front_left_paw.position.set(front_left_leg.position.x -2, front_left_leg.position.y - 2.5, front_left_leg.position.z -1);
+    front_right_paw.position.set(front_right_leg.position.x -2, front_right_leg.position.y - 2.5, front_right_leg.position.z +1);
+
+    back_left_paw.position.set(back_left_leg.position.x -2, back_left_leg.position.y , back_left_leg.position.z -1);
+    back_right_paw.position.set(back_right_leg.position.x - 2, back_right_leg.position.y, back_right_leg.position.z + 1);
 
 
 
     const fox = new THREE.Group();
-    fox.add(body);
+
+
+    //Adicioanr a cabeça e seus elementos á raposa
+    snout.add(nose);
+    left_eye.add(left_iris);
+    right_eye.add(right_iris);
+    head.add(lower_face);
+    head.add(left_eyebrow);
+    head.add(right_eyebrow);
+    head.add(left_eye);
+    head.add(right_eye);
+    head.add(snout);
+    head.add(mouth);
+    head.add(left_ear);
+    head.add(right_ear);
     fox.add(head);
-    fox.add(lower_face);
-    fox.add(left_eyebrow);
-    fox.add(right_eyebrow);
-    fox.add(left_eye);
-    fox.add(right_eye);
-    fox.add(left_iris);
-    fox.add(right_iris);
-    fox.add(snout);
-    fox.add(nose);
-    fox.add(mouth);
-    fox.add(left_ear);
-    fox.add(right_ear);
-    fox.add(tail);
-    fox.add(tail_tip);
-    fox.add(front_left_leg);
-    fox.add(front_right_leg);
-    fox.add(back_left_leg);
-    fox.add(back_right_leg);
-    fox.add(front_left_paw);
-    fox.add(front_right_paw);
-    fox.add(back_left_paw);
-    fox.add(back_right_paw);
 
 
-
+    //Adicionar o corpo e seus elementos do corpo á raposa
+    back_left_leg.add(back_left_paw);
+    back_right_leg.add(back_right_paw);
+    front_left_leg.add(front_left_paw);
+    front_right_leg.add(front_right_paw);
+    tail.add(tail_tip);
+    body.add(tail);
+    body.add(front_left_leg);
+    body.add(front_right_leg);
+    body.add(back_left_leg);
+    body.add(back_right_leg);
+    fox.add(body);
+ 
     fox.castShadow= true;
-
 
       // Prpriedades usadas no movimento do pato
       fox.alive = true;
 
-      fox.speed = 2;
+      fox.speed = 3;
 
       fox.step = -0.08;
 
@@ -381,7 +392,13 @@ function createFox() {
 
       fox.dist = 0; // Distância percorrida pelo pato
 
+      fox.leg_amplitude = Math.PI; // Amplitude do movimento das pernas da raposa
 
+      fox.leg_speed =1.1; // Velocidade do movimento das pernas da raposa
+
+      fox.tail_amplitude = Math.PI/8; // Amplitude do movimento da cauda da raposa
+
+      fox.tail_speed = 0.5; // Velocidade do movimento da cauda da raposa
 
 
     return fox;
@@ -648,7 +665,7 @@ function createVulture(){
     body.castShadow = true;
 
     //Asas do abutre
-    const left_wing_geometry = new THREE.BoxGeometry(0.5, 5, 1);
+    const left_wing_geometry = new THREE.BoxGeometry(0.5, 5, 3.5);
     const left_wing_material = new THREE.MeshPhongMaterial({ color: feathers_color }); // Preto
     const left_wing = new THREE.Mesh(left_wing_geometry, left_wing_material);
     left_wing.name = "vulture_left_wing";
@@ -719,11 +736,229 @@ function createVulture(){
     vulture.step = -0.08;
     vulture.dist = 0; // Distância percorrida pelo pato
     vulture.rotate = -0.5 * Math.PI; // Rotação do pato para inversão do sentido de movimento
-
+    
+    vulture.wing_amplitude = Math.PI/8; // Amplitude do movimento das asas do abutre
+    vulture.wing_speed = 0.4; // Velocidade do movimento das asas do abutre
 
     return vulture;
   
 
+}
+
+
+
+function createCoyote(){
+    let coyote_fur_color = 0x81613C; 
+    const head_geometry = new THREE.SphereGeometry(2);
+    const head_material = new THREE.MeshPhongMaterial({ color: coyote_fur_color }); // Castanho
+    const head = new THREE.Mesh(head_geometry, head_material);
+    head.name = "coyote_head";
+    head.castShadow = true;
+
+
+    const body_geometry = new THREE.CapsuleGeometry(2, 3);
+    const body_material = new THREE.MeshPhongMaterial({ color: coyote_fur_color }); // Castanho
+    const body = new THREE.Mesh(body_geometry, body_material);
+    body.name = "coyote_body";
+    body.castShadow = true;
+
+
+    const left_eye_geometry = new THREE.SphereGeometry(0.6);
+    const left_eye_material = new THREE.MeshPhongMaterial({ color: 0xFFFFFF }); // Branco
+    const left_eye = new THREE.Mesh(left_eye_geometry, left_eye_material);
+    left_eye.name = "coyote_left_eye";
+    left_eye.castShadow = true;
+
+    const right_eye = left_eye.clone();
+    right_eye.name = "coyote_right_eye";
+  
+
+
+    const left_iris_geometry = new THREE.SphereGeometry(0.3);
+    const left_iris_material = new THREE.MeshPhongMaterial({ color: 0x000000 }); // Preto
+    const left_iris = new THREE.Mesh(left_iris_geometry, left_iris_material);
+    left_iris.name = "coyote_left_iris";
+    left_iris.castShadow = true;
+
+
+    const right_iris = left_iris.clone();
+    right_iris.name = "coyote_right_iris";
+
+
+
+    const snout_geometry = new THREE.CylinderGeometry(0.5, 0.5, 3.5);
+    const snout_material = new THREE.MeshPhongMaterial({ color: coyote_fur_color }); // Castanho
+    const snout = new THREE.Mesh(snout_geometry, snout_material);
+    snout.name = "coyote_snout";
+    snout.castShadow = true;
+
+
+    const nose_geometry = new THREE.CylinderGeometry(0.5, 0.5, 0.5);
+    const nose_material = new THREE.MeshPhongMaterial({ color: 0x000000 }); // Preto
+    const nose = new THREE.Mesh(nose_geometry, nose_material);
+    nose.name = "coyote_nose";
+    nose.castShadow = true;
+
+
+    const left_ear_geometry = new THREE.BoxGeometry(0.8, 1.5, 0.8);
+    const left_ear_material = new THREE.MeshPhongMaterial({ color: coyote_fur_color }); // Castanho
+    const left_ear = new THREE.Mesh(left_ear_geometry, left_ear_material);
+
+    left_ear.name = "coyote_left_ear";
+    left_ear.castShadow = true;
+
+
+    const right_ear = left_ear.clone();
+    right_ear.name = "coyote_right_ear";
+   
+    const mouth_geometry = new THREE.BoxGeometry(1, 1, 1);
+    const mouth_material = new THREE.MeshPhongMaterial({ color: 0x000000 }); // Preto
+    const mouth = new THREE.Mesh(mouth_geometry, mouth_material);
+    mouth.name = "coyote_mouth";
+    mouth.castShadow = true;
+
+    const front_left_leg_geometry = new THREE.CylinderGeometry(0.5, 0.5, 5);
+    const front_left_leg_material = new THREE.MeshPhongMaterial({ color: coyote_fur_color }); // Castanho
+    const front_left_leg = new THREE.Mesh(front_left_leg_geometry, front_left_leg_material);
+    front_left_leg.name = "coyote_front_left_leg";
+    front_left_leg.castShadow = true;
+    front_left_leg.rotation.z = 0.5 * Math.PI;
+
+    const front_right_leg = front_left_leg.clone();
+    front_right_leg.name = "coyote_front_right_leg";
+
+
+    const back_left_leg = front_left_leg.clone();
+    back_left_leg.name = "coyote_back_left_leg";
+
+
+    const back_right_leg = front_left_leg.clone();
+    back_right_leg.name = "coyote_back_right_leg";
+    
+
+    const front_left_paw_geometry = new THREE.BoxGeometry(0.5, 1, 0.8);
+    const front_left_paw_material = new THREE.MeshPhongMaterial({ color: 0x000000 }); // Preto
+    const front_left_paw = new THREE.Mesh(front_left_paw_geometry, front_left_paw_material);
+
+    front_left_paw.name = "coyote_front_left_paw";
+    front_left_paw.castShadow = true;
+
+    const front_right_paw = front_left_paw.clone();
+    front_right_paw.name = "coyote_front_right_paw";
+
+    const back_left_paw = front_left_paw.clone();
+    back_left_paw.name = "coyote_back_left_paw";
+
+    const back_right_paw = front_left_paw.clone();
+    back_right_paw.name = "coyote_back_right_paw";
+
+
+    const tail_geometry = new THREE.ConeGeometry(0.5,6);
+    const tail_material = new THREE.MeshPhongMaterial({ color: coyote_fur_color }); // Castanho
+    const tail = new THREE.Mesh(tail_geometry, tail_material);
+    tail.name = "coyote_tail";
+    tail.castShadow = true;
+    tail.rotation.z = -0.3 * Math.PI;
+
+
+    const tail_tip_geometry = new THREE.CylinderGeometry(0, 0.5, 1);
+    const tail_tip_material = new THREE.MeshPhongMaterial({ color: 0x00000 }); // Preto
+    const tail_tip = new THREE.Mesh(tail_tip_geometry, tail_tip_material);
+    tail_tip.name = "coyote_tail_tip";
+    tail_tip.castShadow = true;
+    tail_tip.rotation.z = Math.PI;
+    
+
+    
+    body.position.set(0, 5, 0);
+
+    body.rotation.z = -0.5 * Math.PI;
+
+
+    head.position.set(body.position.x +5, body.position.y, body.position.z);
+
+    left_eye.position.set(head.position.x - 4 , head.position.y -4.5 , head.position.z + 1);
+    right_eye.position.set(head.position.x - 4, head.position.y -4.5 , head.position.z - 1);
+    
+    left_iris.position.set(left_eye.position.x - 0.8, left_eye.position.y - 0.5, left_eye.position.z - 0.7);
+    right_iris.position.set(right_eye.position.x - 0.8, right_eye.position.y - 0.5, right_eye.position.z + 0.7);
+
+     
+    snout.position.set(head.position.x - 3, head.position.y - 5.5, head.position.z);
+    snout.rotation.z = 0.5 * Math.PI;
+
+
+    nose.position.set(snout.position.x - 2, snout.position.y - 1.5, snout.position.z);
+    
+    left_ear.position.set(head.position.x -4.5 , head.position.y -3 , head.position.z + 1.25);
+    right_ear.position.set(head.position.x - 4.5, head.position.y - 3, head.position.z - 1.2);
+
+    mouth.position.set(head.position.x-4 , head.position.y - 6, head.position.z);
+
+    front_left_leg.position.set(body.position.x + 2, body.position.y - 3, body.position.z + 1);
+    front_right_leg.position.set(body.position.x + 2, body.position.y - 3, body.position.z - 1);
+
+    back_left_leg.position.set(front_left_leg.position.x, -front_left_leg.position.y, front_left_leg.position.z);
+    back_right_leg.position.set(front_right_leg.position.x, -front_right_leg.position.y, front_right_leg.position.z);
+
+    
+    front_left_paw.position.set(front_left_leg.position.x - 2, front_left_leg.position.y- 5 , front_left_leg.position.z - 1);
+    front_right_paw.position.set(front_right_leg.position.x - 2, front_right_leg.position.y - 5, front_right_leg.position.z + 1);
+    
+    back_left_paw.position.set(back_left_leg.position.x - 2, back_left_leg.position.y - 1, back_left_leg.position.z - 1);
+    back_right_paw.position.set(back_right_leg.position.x - 2, back_right_leg.position.y - 1, back_right_leg.position.z + 1);
+     
+    tail.position.set(body.position.x - 1, body.position.y - 7.9, body.position.z);
+    
+    tail_tip.position.set(tail.position.x +1, tail.position.y-0.6 , tail.position.z);
+    
+    const coyote = new THREE.Group();
+
+
+    snout.add(nose);
+    left_eye.add(left_iris);
+    right_eye.add(right_iris);
+    head.add(left_eye);
+    head.add(right_eye);
+    head.add(snout);
+    head.add(left_ear);
+    head.add(right_ear);
+    head.add(mouth);
+    coyote.add(head);
+    
+    tail.add(tail_tip);
+    back_left_leg.add(back_left_paw);
+    back_right_leg.add(back_right_paw);
+    front_left_leg.add(front_left_paw);
+    front_right_leg.add(front_right_paw);
+    coyote.add(body);
+    body.add(front_left_leg);
+    body.add(front_right_leg);
+    body.add(back_left_leg);
+    body.add(back_right_leg);
+    body.add(tail);
+
+
+
+    coyote.castShadow = true;
+
+    // Prpriedades usadas no movimento do coiote
+
+    coyote.alive = true;
+    coyote.speed = 2.5;
+    coyote.step = -0.08;
+    coyote.dist = 0; // Distância percorrida pelo pato
+    coyote.rotate = -0.5 * Math.PI; // Rotação do pato para inversão do sentido de movimento
+    
+    coyote.leg_amplitude = Math.PI/2 ;
+
+    coyote.leg_speed = 1;
+
+    coyote.tail_amplitude = Math.PI / 6;
+
+    coyote.tail_speed = 1;
+
+    return coyote;
 }
 
 
