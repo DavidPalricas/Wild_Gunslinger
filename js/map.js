@@ -57,7 +57,17 @@ ENV_OBJECTS  = [ {"plane":[15, 0, 0]},
                 {"cactus":[100, 0, 50],"scale":1.4},
                 {"cactus":[240, 0, 140],"scale":2},
                 {"cactus":[320, 0, 170],"scale":1.3},
-                {"cactus":[300, 0, -100],"scale":1.5},];
+                {"cactus":[300, 0, -100],"scale":1.5},
+                {"rock":[290, 0, 50],"scale":1.5},
+                {"rock":[60, 0, -30],"scale":1.3},
+                {"cactus":[100, 0, 0],"scale":1.5},
+                {"cactus":[60, 0, 0],"scale":2},
+                {"rock" : [50,0,20],"scale":3},
+                {"cactus" : [60,0,60],"scale":2},
+                {"rock" : [50,0,-50],"scale":2},
+                {"cactus" : [60,0,-90],"scale":1.5},
+                {"cactus" : [50,0,-100],"scale":1.5},
+                {"rock" : [0,0,-80],"scale":3},];
 
 CONFIG = [{"bullets": 4}]
 

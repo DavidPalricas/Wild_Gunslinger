@@ -756,7 +756,7 @@ function createCoyote(){
     head.castShadow = true;
 
 
-    const body_geometry = new THREE.CapsuleGeometry(2, 3);
+    const body_geometry = new THREE.CapsuleGeometry(2.2, 5);
     const body_material = new THREE.MeshPhongMaterial({ color: coyote_fur_color }); // Castanho
     const body = new THREE.Mesh(body_geometry, body_material);
     body.name = "coyote_body";

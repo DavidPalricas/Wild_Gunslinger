@@ -553,7 +553,10 @@ function play_theme(){
 
 function shoot(){
     let intersects = raycaster.intersectObjects(sceneElements.sceneGraph.children, true);
-    let target = intersects[0];
+    let target = intersects[0] ? intersects[0] : null;
+    if (target == null) {
+        return;
+    }
     let animal_hunted;
 
     const All_Animals = ["boar", "fox", "duck", "vulture","coyote"];
