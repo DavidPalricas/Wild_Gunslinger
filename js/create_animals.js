@@ -145,7 +145,7 @@ function createDuck() {
     // Prpriedades usadas no movimento do pato
         duck.alive = true;
 
-        duck.speed = 1.1;
+        duck.speed = 10.8;
 
         duck.step = -0.08;
 
@@ -384,7 +384,7 @@ function createFox() {
       // Prpriedades usadas no movimento do pato
       fox.alive = true;
 
-      fox.speed = 3;
+      fox.speed = 5.04;
 
       fox.step = -0.08;
 
@@ -612,7 +612,7 @@ function createBoar() {
       // Prpriedades usadas no movimento do pato
       boar.alive = true;
 
-      boar.speed = 5;
+      boar.speed = 6;
 
       boar.step = -0.08;
 
