@@ -301,7 +301,7 @@ function create_Ahstray(){
 
     base.position.set(0, 0, 0);
     ashes.position.set(base.position.x, base.position.y + 0.1, base.position.z);
-    cigar.position.set(ashes.position.x, ashes.position.y + 0.45, ashes.position.z + 0.2);
+    cigar.position.set(ashes.position.x, ashes.position.y + 0.28, ashes.position.z + 0.2);
 
     const ashtray = new THREE.Group();
     ashes.add(cigar);
@@ -313,7 +313,7 @@ function create_Ahstray(){
 
 
 function create_Cigar(){
-    const body_geometry = new THREE.CylinderGeometry(0.1, 0.1, 1.5);
+    const body_geometry = new THREE.CylinderGeometry(0.1, 0.1, 1);
     const body_material = new THREE.MeshPhongMaterial({ color: 0x8B4513 }); // Castanho
     const body = new THREE.Mesh(body_geometry, body_material);
     body.name = "cigar_body";
@@ -326,7 +326,7 @@ function create_Cigar(){
     head.name = "cigar_head";
     head.castShadow = true;
 
-    head.position.set(body.position.x, body.position.y + 0.85, body.position.z);
+    head.position.set(body.position.x, body.position.y + 0.5, body.position.z);
 
     const cigar = new THREE.Group();
     cigar.add(body);
