@@ -206,7 +206,7 @@ const scene = {
                     element_model = create_Env_models(element_name,level);
                     break;
                 case "tree":
-                    element_model = create_Env_models(element_name);
+                    element_model = create_Env_models(element_name,level);
                     element_model.name = "tree" + tree_id;
                     tree_id++;
                     break;

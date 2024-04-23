@@ -109,10 +109,8 @@ const LEVEL2 = [CONFIG,ENV_OBJECTS, ANIMALS];
 
 
 
+const LEVEL3 = [CONFIG,ENV_OBJECTS, ANIMALS];
 
 
-
-
-
-export const MAP = [LEVEL1,LEVEL2];
+export const MAP = [LEVEL1,LEVEL2,LEVEL3];
 

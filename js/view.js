@@ -166,7 +166,7 @@ const scene = {
                     element_model = create_Env_models(element_name,level);
                     break;
                 case "tree":
-                    element_model = create_Env_models(element_name);
+                    element_model = create_Env_models(element_name,level);
                     element_model.name = "tree" + tree_id;
                     tree_id++;
                     break;
@@ -365,6 +365,7 @@ function onDocumentKeyDown(event) {
 function onDocumentClick(event) {
     const level1 = document.getElementById("level1");
     const level2 = document.getElementById("level2");
+    const level3 = document.getElementById("level3");
 
    
     switch (event.target.id) {
@@ -373,14 +374,22 @@ function onDocumentClick(event) {
             Change_Level();
             level1.style.opacity = 1;
             level2.style.opacity = 0.5;
-            
+            level3.style.opacity = 0.5;
             break;
         case "level2":
             level = 2;
             Change_Level();
             level1.style.opacity = 0.5;
             level2.style.opacity = 1;
+            level3.style.opacity = 0.5;
             break;
+
+        case "level3":
+            level = 3;
+            Change_Level();
+            level1.style.opacity = 0.5;
+            level2.style.opacity = 0.5;
+            level3.style.opacity = 1;
         default:
             break;
     }

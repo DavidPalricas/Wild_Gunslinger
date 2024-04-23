@@ -7,7 +7,7 @@ export function create_Env_models(model,level){
             model = createPlane(level);
             break;
         case "tree":
-            model = createTree();
+            model = createTree(level);
             break;
         case "rock":
             model = createRock();
@@ -46,6 +46,10 @@ function createPlane(level){
         plane_texture = "grass.png";
 
     }
+    else if(level == 3){
+        plane_texture = "snow.png";
+
+    }
   
 
     const planeGeometry = new THREE.PlaneGeometry(1000, 700);
@@ -65,7 +69,7 @@ function createPlane(level){
 
 
 
-function createTree() {
+function createTree(level) {
     const cylinderRadius = 5;
 
     const cylinderHeight = 50;
@@ -83,13 +87,20 @@ function createTree() {
 
     // Cone
 
+    let leaves_color = 0x228B22; // Verde
+
+    if (level == 3) {
+        leaves_color = 0xFFFFFF; // Branco
+        
+    }
+
     const baseConeRadius = 12;
 
     const coneHeight = 25;
 
     const coneGeometry = new THREE.ConeGeometry(baseConeRadius, coneHeight, 32);
 
-    const greenMaterial = new THREE.MeshPhongMaterial({ color: 0x228B22});
+    const greenMaterial = new THREE.MeshPhongMaterial({ color: leaves_color});
 
     const cone = new THREE.Mesh(coneGeometry, greenMaterial);
     cone.castShadow = true;

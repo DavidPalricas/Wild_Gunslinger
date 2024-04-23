@@ -83,6 +83,10 @@ body {
     opacity: 0.5;
 }
 
+#level3{
+    opacity: 0.5;
+}
+
 .progress-bar-container {
     position: absolute;
     top: 50%;
