@@ -170,7 +170,7 @@ function createFox(level) {
 
 
     let fox_pur;
-    console.log(level);
+   
 
     if (level != 3) {
         fox_pur = 0xFFA500; // Laranja

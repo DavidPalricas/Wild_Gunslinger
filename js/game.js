@@ -10,6 +10,7 @@ import { createObjects } from "./create_objects.js";
 
 
 let gun_grabbed = false;
+let night = false;
 let n_bullets;
 let bullet = document.getElementById("n_bullets");
 let camera_rotate_left = false;
@@ -36,7 +37,8 @@ let level_text = document.getElementById("level");
 let raycaster = new THREE.Raycaster();
 let mouse = new THREE.Vector2();
 
-
+let cheatcode = "";
+let cheatcode_used = false;
 
 let animals_count;
 
@@ -338,6 +340,8 @@ function computeFrame(time) {
         
     }
 
+ 
+
     ANIMALS_LEVEL.forEach(animal => {
         const animal_model = sceneElements.sceneGraph.getObjectByName(animal);
        
@@ -358,6 +362,7 @@ document.addEventListener('keyup', onDocumentKeyUp, false);
 document.addEventListener('click', fire_gun, false);
 
 
+
 // Atualização da posição do mouse
 window.addEventListener('mousemove', function(event) {
     mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
@@ -371,6 +376,7 @@ window.addEventListener('mousemove', function(event) {
 function onDocumentKeyDown(event) {
     switch (event.keyCode) {
         case 65: //a
+            cheatcode += "a";
             camera_rotate_left = true;
             if (camera_look > -20 && gun_grabbed == true){
                 left.style.opacity = 1;
@@ -378,8 +384,10 @@ function onDocumentKeyDown(event) {
                 sceneElements.camera.lookAt(20, 12, camera_look);
             }
             break;
-          
+        
+    
         case 68: //d
+            cheatcode += "d";
             camera_rotate_right = true;
             if (camera_look < 20 && gun_grabbed == true){
                 right.style.opacity = 1;
@@ -391,7 +399,23 @@ function onDocumentKeyDown(event) {
         case 69: //e
             Grab_Gun();
            
-            break;        
+            break;
+        case 71: //g
+            cheatcode += "g";
+            break; 
+        case 74: //j
+              cheatcode += "j";
+              break;
+        case 78: //n
+             cheatcode += "n";
+             switch_day_night();
+             break;
+
+        case 79: //o
+            cheatcode += "o";
+            Cheatcodes();
+            break;
+
         default:
             break;
     }
@@ -1001,6 +1025,42 @@ function createTimer(){
          
         }
     }, 1000);
+}
+
+
+function switch_day_night(){
+
+    if (night == false) {
+        sceneElements.renderer.setClearColor(0x000000 , 1.0);
+        night = true;
+
+        sceneElements.sceneGraph.getObjectByName("ambient_light").intensity = 0;
+        sceneElements.sceneGraph.getObjectByName("spot_light1").intensity = 40;
+        sceneElements.sceneGraph.getObjectByName("spot_light2").intensity = 40;
+        sceneElements.sceneGraph.getObjectByName("spot_light3").intensity = 40;
+
+    }else{
+        sceneElements.renderer.setClearColor(0x87CEEB, 1.0);
+        night = false;
+
+        sceneElements.sceneGraph.getObjectByName("ambient_light").intensity = 0.7;
+        sceneElements.sceneGraph.getObjectByName("spot_light1").intensity = 170;
+        sceneElements.sceneGraph.getObjectByName("spot_light2").intensity = 170;
+        sceneElements.sceneGraph.getObjectByName("spot_light3").intensity = 170;
+    }
+    
+    
+
+
+}
+
+
+function Cheatcodes(){
+    if (cheatcode.includes("django") && gun_grabbed == true) {
+        cheatcode_used = true;
+        level = MAP.length;
+        Change_Level();
+    }
 }
 
 
