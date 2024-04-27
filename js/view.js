@@ -281,6 +281,14 @@ const scene = {
         const table = createObjects("table",level, n_bullets,mode);
         sceneGraph.add(table);
 
+
+        if (level == 4) {
+            const house = createObjects("house",level, n_bullets,mode);
+            house.position.set(200, 0, 0);
+            sceneGraph.add(house);
+            
+        }
+
     }
 };
 
@@ -366,6 +374,9 @@ function onDocumentClick(event) {
     const level1 = document.getElementById("level1");
     const level2 = document.getElementById("level2");
     const level3 = document.getElementById("level3");
+    const level4 = document.getElementById("level4");
+
+
 
    
     switch (event.target.id) {
@@ -375,6 +386,7 @@ function onDocumentClick(event) {
             level1.style.opacity = 1;
             level2.style.opacity = 0.5;
             level3.style.opacity = 0.5;
+            level4.style.opacity = 0.5;
             break;
         case "level2":
             level = 2;
@@ -382,6 +394,7 @@ function onDocumentClick(event) {
             level1.style.opacity = 0.5;
             level2.style.opacity = 1;
             level3.style.opacity = 0.5;
+            level4.style.opacity = 0.5;
             break;
 
         case "level3":
@@ -390,6 +403,17 @@ function onDocumentClick(event) {
             level1.style.opacity = 0.5;
             level2.style.opacity = 0.5;
             level3.style.opacity = 1;
+            level4.style.opacity = 0.5;
+            break;
+
+        case "level4":
+            level = 4;
+            Change_Level();
+            level1.style.opacity = 0.5;
+            level2.style.opacity = 0.5;
+            level3.style.opacity = 0.5;
+            level4.style.opacity = 1;
+            break;
         default:
             break;
     }

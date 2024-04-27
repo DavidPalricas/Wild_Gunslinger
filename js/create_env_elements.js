@@ -50,6 +50,9 @@ function createPlane(level){
         plane_texture = "snow.jpg";
 
     }
+    else{
+        plane_texture = "canyon.jpg";
+    }
   
 
     const planeGeometry = new THREE.PlaneGeometry(1000, 700);
@@ -142,8 +145,17 @@ function createTree(level) {
 
 
 function createRock(level) {
+    let rock_color;
+
+    if(level != 4){
+        rock_color = 0x808080; // Cinzento
+
+    }else{
+        rock_color = 0xB26B5D; //Cor de rocha ddo grand canyon
+
+    }
     const geometry = new THREE.SphereGeometry(5);
-    const material = new THREE.MeshPhongMaterial({ color: 0x808080 });
+    const material = new THREE.MeshPhongMaterial({ color: rock_color });
     const rock_mesh = new THREE.Mesh(geometry, material);
      
     const rock = new THREE.Group();

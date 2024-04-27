@@ -327,6 +327,14 @@ const scene = {
         const table = createObjects("table",level, n_bullets,mode);
         sceneGraph.add(table);
 
+
+        if (level == 4) {
+            const house = createObjects("house",level, n_bullets,mode);
+            house.position.set(200, 0, 0);
+            sceneGraph.add(house);
+            
+        }
+
     }
 };
 
