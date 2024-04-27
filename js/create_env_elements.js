@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import { createMesh } from "./get_texture.js";
 
 
 export function create_Env_models(model,level){
@@ -23,6 +24,9 @@ export function create_Env_models(model,level){
         case "cactus":
             model = createCactus();
             break;
+
+
+        
         default:
             break;
     }
@@ -255,12 +259,6 @@ function createCactus() {
 
 
 
-function createMesh(geom, imageFile) {
-    const texture = new THREE.TextureLoader().load("../textures/" + imageFile);
-    texture.minFilter = THREE.LinearFilter; // Ou use outras opções de filtragem
-    const material = new THREE.MeshStandardMaterial({ map: texture });
-   
-    const mesh = new THREE.Mesh(geom, material);
-    return mesh;
-}
+
+
 

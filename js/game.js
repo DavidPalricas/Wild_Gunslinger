@@ -5,9 +5,10 @@ import {MAP} from "./map.js";
 import { create_Animal_Model } from "./create_animals.js";
 import { create_Env_models } from "./create_env_elements.js";
 import { createObjects } from "./create_objects.js";
+import { createMesh } from "./get_texture.js";
 
 
-
+const snowflakes = [];
 
 let cheatcodes = {"django":false,"draw":false,"deadeye":false};
 
@@ -251,6 +252,32 @@ const scene = {
             sceneGraph.add(element_model);
 
 
+
+
+            if (level == 3) {
+                const geometry = new THREE.SphereGeometry(0.5);
+                let snowflake = new createMesh(geometry, "snow.jpg");
+           
+                for (let i = 0; i < 100; i++) {
+                    
+                    snowflake = snowflake.clone(); 
+                
+                    /*
+                      Gerar de fôrma aleatória a posição dos flocos de neve
+                      dentro do terreno presente da cena e com uma altitude máxima de 400
+                    */
+                    snowflake.position.set( 
+                        Math.random() * 1000 - 500, //Math.random() * comprimento_terreno - comprimento_terreno/2;
+                        Math.random() * 600,      
+                        Math.random() * 700 - 350  //Math.random() * largura_terreno - largura_terreno/2;
+                    );
+                    sceneGraph.add(snowflake);
+                    snowflakes.push(snowflake);
+}
+                
+            }
+
+
          }
 
         animals_count = ANIMALS.length;
@@ -362,6 +389,20 @@ function computeFrame(time) {
         }
         
     });
+
+    if (level == 3){
+        for (let i = 0; i < snowflakes.length; i++) {
+            // Mova o floco de neve para baixo
+            snowflakes[i].position.y -= 0.5; // Altere a velocidade de queda ajustando este valor
+            // Se o floco de neve atingir o chão, coloque-o de volta no topo
+            if (snowflakes[i].position.y < -10) {
+                snowflakes[i].position.y = 20;
+            }
+        }
+    }
+    
+    
+
     
    helper.render(sceneElements);
    requestAnimationFrame(computeFrame);
