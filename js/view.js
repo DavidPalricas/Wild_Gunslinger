@@ -171,7 +171,7 @@ const scene = {
                     tree_id++;
                     break;
                 case "rock":
-                    element_model = create_Env_models(element_name);
+                    element_model = create_Env_models(element_name,level);
                     element_model.name = "rock" + rock_id;
                     rock_id++;
                     break;
@@ -180,7 +180,7 @@ const scene = {
                     element_model.scale.set(2, 2, 2);
                     break;
                 case "bush":
-                    element_model = create_Env_models(element_name);
+                    element_model = create_Env_models(element_name,level);
                     element_model.name = "bush" + bush_id;
                     bush_id++;
                     break;
@@ -234,7 +234,7 @@ const scene = {
                     duck_id++;
                     break;
                 case "fox":
-                    animal_model = create_Animal_Model(animal_name);
+                    animal_model = create_Animal_Model(animal_name,level);
                     animal_model.rotation.y = 0.5 *Math.PI;
                     animal_model.name = animal_name + fox_id;
                     fox_id++;

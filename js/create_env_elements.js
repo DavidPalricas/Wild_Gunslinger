@@ -10,14 +10,14 @@ export function create_Env_models(model,level){
             model = createTree(level);
             break;
         case "rock":
-            model = createRock();
+            model = createRock(level);
             break;
         case "lake":
             model = createLake();
             break;
 
         case "bush":
-            model = createBush();
+            model = createBush(level);
             break;
 
         case "cactus":
@@ -47,7 +47,7 @@ function createPlane(level){
 
     }
     else if(level == 3){
-        plane_texture = "snow.png";
+        plane_texture = "snow.jpg";
 
     }
   
@@ -70,6 +70,14 @@ function createPlane(level){
 
 
 function createTree(level) {
+    let leaves_color;
+    if(level != 3){
+        leaves_color = 0x228B22; // Green
+       
+    }
+    else{
+        leaves_color = 0x013220; // Verde Escuro
+    }
     const cylinderRadius = 5;
 
     const cylinderHeight = 50;
@@ -87,12 +95,7 @@ function createTree(level) {
 
     // Cone
 
-    let leaves_color = 0x228B22; // Verde
-
-    if (level == 3) {
-        leaves_color = 0xFFFFFF; // Branco
-        
-    }
+  
 
     const baseConeRadius = 12;
 
@@ -120,6 +123,13 @@ function createTree(level) {
 
     tree.add(cone);
 
+
+    if(level == 3){
+        const snow = createMesh(new THREE.ConeGeometry(11,22), "snow.jpg");
+        snow.position.set(cone.position.x,cone.position.y- 60,cone.position.z);
+        cone.add(snow);
+    }
+
     tree.castShadow = true;
 
 
@@ -131,16 +141,26 @@ function createTree(level) {
 }
 
 
-function createRock() {
+function createRock(level) {
     const geometry = new THREE.SphereGeometry(5);
     const material = new THREE.MeshPhongMaterial({ color: 0x808080 });
-    const rock = new THREE.Mesh(geometry, material);
-
+    const rock_mesh = new THREE.Mesh(geometry, material);
+     
+    const rock = new THREE.Group();
+    rock.add(rock_mesh);
     rock.rotation.x = -0.5 * Math.PI;
 
 
     rock.castShadow= true;
     rock.receiveShadow = true;
+
+
+    if (level == 3) {
+        const snow = createMesh(new THREE.SphereGeometry(4.5), "snow.jpg");
+        snow.position.set(rock.position.x, rock.position.y, rock.position.z+2);
+        rock.add(snow);
+        
+    }
 
 
 
@@ -174,22 +194,41 @@ function createLake() {
 }
 
 
-function createBush() {
+function createBush(level) {
+
+    let bush_color; 
+
+
+    if(level != 3){
+        bush_color = 0x228B22; // Green
+    }else{
+        bush_color = 0x013220; // Verde Escuro
+    }
+
     const geometry = new THREE.SphereGeometry(5);
-    const material = new THREE.MeshPhongMaterial({ color: 0x228B22});
-    const bush = new THREE.Mesh(geometry, material);
+    const material = new THREE.MeshPhongMaterial({ color: bush_color});
+    const bush_mesh = new THREE.Mesh(geometry, material);
+     
+    const bush = new THREE.Group();
 
 
 
+    bush.add(bush_mesh);
     bush.castShadow= true;
     bush.receiveShadow = true;
+
+    if (level == 3) {
+        const snow = createMesh(new THREE.SphereGeometry(4.5), "snow.jpg");
+        snow.position.set(bush.position.x, bush.position.y+2, bush.position.z);
+        bush.add(snow);
+        
+    }
 
     return bush;
 }
 
 function createCactus() {
     const body_geometry = new THREE.CapsuleGeometry(1.5, 10);
-    const body_material = new THREE.MeshPhongMaterial({ color: 0x228B22 });
     const body = createMesh(body_geometry, "cactus.jpg");
 
     body.castShadow = true;

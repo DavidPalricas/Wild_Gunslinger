@@ -211,7 +211,7 @@ const scene = {
                     tree_id++;
                     break;
                 case "rock":
-                    element_model = create_Env_models(element_name);
+                    element_model = create_Env_models(element_name,level);
                     element_model.name = "rock" + rock_id;
                     rock_id++;
                     break;
@@ -220,7 +220,7 @@ const scene = {
                     element_model.scale.set(2, 2, 2);
                     break;
                 case "bush":
-                    element_model = create_Env_models(element_name);
+                    element_model = create_Env_models(element_name,level);
                     element_model.name = "bush" + bush_id;
                     bush_id++;
                     break;
