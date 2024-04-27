@@ -9,6 +9,10 @@ import { createObjects } from "./create_objects.js";
 
 
 
+let cheatcodes = {"django":false,"draw":false,"deadeye":false};
+
+let all_cheats_used = 0;
+
 let gun_grabbed = false;
 let night = false;
 let n_bullets;
@@ -37,8 +41,7 @@ let level_text = document.getElementById("level");
 let raycaster = new THREE.Raycaster();
 let mouse = new THREE.Vector2();
 
-let cheatcode = "";
-let cheatcode_used = false;
+let cheatcode_input = "";
 
 let animals_count;
 
@@ -330,6 +333,7 @@ const scene = {
 var delta = 0;
 
 function computeFrame(time) { 
+    console.log(cheatcode_input);
     delta += 0.08;
   
     //Revolver segue o rato
@@ -376,7 +380,11 @@ window.addEventListener('mousemove', function(event) {
 function onDocumentKeyDown(event) {
     switch (event.keyCode) {
         case 65: //a
-            cheatcode += "a";
+            if(all_cheats_used < Object.keys(cheatcodes).length){
+                cheatcode_input += "a";
+
+            }
+            
             camera_rotate_left = true;
             if (camera_look > -20 && gun_grabbed == true){
                 left.style.opacity = 1;
@@ -387,7 +395,10 @@ function onDocumentKeyDown(event) {
         
     
         case 68: //d
-            cheatcode += "d";
+            if(all_cheats_used < Object.keys(cheatcodes).length){
+                cheatcode_input += "d";
+
+            }
             camera_rotate_right = true;
             if (camera_look < 20 && gun_grabbed == true){
                 right.style.opacity = 1;
@@ -397,27 +408,87 @@ function onDocumentKeyDown(event) {
            
             break;
         case 69: //e
-            Grab_Gun();
+            if(all_cheats_used < Object.keys(cheatcodes).length){
+                cheatcode_input += "e";
+                Cheatcodes("deadeye");
+
+            }
+            if (!gun_grabbed){
+                Grab_Gun();
+            }
+            
            
             break;
         case 71: //g
-            cheatcode += "g";
+            if(all_cheats_used < Object.keys(cheatcodes).length){
+                    cheatcode_input += "g";
+
+            }
             break; 
         case 74: //j
-              cheatcode += "j";
+             if(all_cheats_used < Object.keys(cheatcodes).length){
+                cheatcode_input += "j";
+
+              }
               break;
+
+        case 77: //m
+            if(all_cheats_used < Object.keys(cheatcodes).length){
+                cheatcode_input += "m";
+
+            }
+            break;
+
         case 78: //n
-             cheatcode += "n";
-             switch_day_night();
-             break;
+            if(all_cheats_used < Object.keys(cheatcodes).length){
+                cheatcode_input += "n";
+
+            }
+            switch_day_night();
+            break;
 
         case 79: //o
-            cheatcode += "o";
-            Cheatcodes();
+            if(all_cheats_used < Object.keys(cheatcodes).length){
+                cheatcode_input += "o";
+                Cheatcodes("django");
+
+            }
+            
+            break;
+
+        case 82: //r
+            if(all_cheats_used < Object.keys(cheatcodes).length){
+                cheatcode_input += "r";
+
+            }
+            break;
+
+        case 87: //w
+            if(all_cheats_used < Object.keys(cheatcodes).length){
+                cheatcode_input += "w";
+                Cheatcodes("draw");
+
+            }
+            break;
+
+        case 89: //y
+            if(all_cheats_used < Object.keys(cheatcodes).length){
+                cheatcode_input += "y";
+                
+
+            }
             break;
 
         default:
             break;
+    }
+
+    
+    /*Se o input do cheatcode for igual a 7(comprimento máximo de um cheatcode),
+    */
+    if (cheatcode_input.length > 7) {
+        cheatcode_input = "";
+        
     }
 }
 
@@ -488,13 +559,7 @@ function Grab_Gun() {
 function fire_gun(event) {
     if (n_bullets > 0 && gun_grabbed == true) {
         shoot();
-        const table_body = sceneElements.sceneGraph.getObjectByName("table").getObjectByName("body");
-     
-
-        table_body.remove(table_body.getObjectByName("bullet" + n_bullets));
-        
-
-       
+         
         const audioLoader = new THREE.AudioLoader();
         audioLoader.load( '../sounds/revolver_shot.mp3', function( buffer ) {
             const sound = helper.sound;
@@ -503,11 +568,26 @@ function fire_gun(event) {
             sound.setVolume( 0.5 );
             sound.play();
         });
-        n_bullets--;
-    
-        //Atualizar o número de balas no ecrã
-        bullet.innerHTML = "X" + n_bullets;
 
+        
+        if (!cheatcodes["draw"]) {
+            const table_body = sceneElements.sceneGraph.getObjectByName("table").getObjectByName("body");
+     
+
+            table_body.remove(table_body.getObjectByName("bullet" + n_bullets));
+            
+    
+           
+        
+            n_bullets--;
+        
+            //Atualizar o número de balas no ecrã
+            bullet.innerHTML = "X" + n_bullets;
+    
+            
+        }
+
+       
 
         if (n_bullets == 0 && animals_count > 0) {
 
@@ -1016,9 +1096,19 @@ function Loading_Screen(){
 
 function createTimer(){
     let timer = setInterval(function() {
-       
+
+
+        if (game_time == null) {
+            clearInterval(timer);
+            return;
+            
+        }
+        
         game_time--;
         show_time.innerHTML = game_time +"s ";
+
+        
+        
         if (game_time == 0) {
             clearInterval(timer);
             Game_Over();
@@ -1055,13 +1145,35 @@ function switch_day_night(){
 }
 
 
-function Cheatcodes(){
-    if (cheatcode.includes("django") && gun_grabbed == true) {
-        cheatcode_used = true;
-        level = MAP.length;
-        Change_Level();
+function Cheatcodes(cheatcode){
+
+    if (!gun_grabbed) {
+        cheatcode_input = "";
+        return;
+        
     }
+
+    if (cheatcode_input.includes(cheatcode)) {
+        cheatcodes[cheatcode] = true;
+        if (cheatcode == "django") {
+            level = MAP.length;
+            Change_Level();
+            
+        }
+        else if (cheatcode == "deadeye"){
+            game_time = null;
+            show_time.innerHTML = "Unlimited";
+
+        }
+        cheatcode_input = ""; //Limpa o input 
+        all_cheats_used++;
+        
+    }
+
+  
 }
+
+
 
 
 init();
