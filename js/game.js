@@ -8,7 +8,8 @@ import { createObjects } from "./create_objects.js";
 import { createMesh } from "./get_texture.js";
 
 
-const snowflakes = [];
+const rain = [];
+let israin = false;
 
 let cheatcodes = {"django":false,"draw":false,"deadeye":false};
 
@@ -180,7 +181,20 @@ const helper = {
 
 const scene = {
     load3DObjects: function(sceneGraph) {
-      
+
+
+
+      if(israin==true && (level == 2 || level == 3)){
+        sceneElements.renderer.setClearColor(0x708090, 1.0);
+        create_Rain_Snow();
+
+      }else if(israin == true  && (level == 1 || level == 4)){
+           if(night){
+               sceneElements.renderer.setClearColor(0x000000, 1.0);
+              }else{
+                sceneElements.renderer.setClearColor(0x87CEEB, 1.0);
+                }
+        }      
   
       const LEVEL = MAP[level-1];
        
@@ -254,28 +268,7 @@ const scene = {
 
 
 
-            if (level == 3) {
-                const geometry = new THREE.SphereGeometry(0.5);
-                let snowflake = new createMesh(geometry, "snow.jpg");
            
-                for (let i = 0; i < 100; i++) {
-                    
-                    snowflake = snowflake.clone(); 
-                
-                    /*
-                      Gerar de fôrma aleatória a posição dos flocos de neve
-                      dentro do terreno presente da cena e com uma altitude máxima de 400
-                    */
-                    snowflake.position.set( 
-                        Math.random() * 1000 - 500, //Math.random() * comprimento_terreno - comprimento_terreno/2;
-                        Math.random() * 600,      
-                        Math.random() * 700 - 350  //Math.random() * largura_terreno - largura_terreno/2;
-                    );
-                    sceneGraph.add(snowflake);
-                    snowflakes.push(snowflake);
-}
-                
-            }
 
 
          }
@@ -306,7 +299,7 @@ const scene = {
                     duck_id++;
                     break;
                 case "fox":
-                    animal_model = create_Animal_Model(animal_name);
+                    animal_model = create_Animal_Model(animal_name,level);
                     animal_model.rotation.y = 0.5 *Math.PI;
                     animal_model.name = animal_name + fox_id;
                     fox_id++;
@@ -368,7 +361,6 @@ const scene = {
 var delta = 0;
 
 function computeFrame(time) { 
-    console.log(cheatcode_input);
     delta += 0.08;
   
     //Revolver segue o rato
@@ -390,16 +382,19 @@ function computeFrame(time) {
         
     });
 
-    if (level == 3){
-        for (let i = 0; i < snowflakes.length; i++) {
+
+    if ( israin ){
+        for (let i = 0; i < rain.length; i++) {
             // Mova o floco de neve para baixo
-            snowflakes[i].position.y -= 0.5; // Altere a velocidade de queda ajustando este valor
+            rain[i].position.y -= 0.5; // Altere a velocidade de queda ajustando este valor
             // Se o floco de neve atingir o chão, coloque-o de volta no topo
-            if (snowflakes[i].position.y < -10) {
-                snowflakes[i].position.y = 20;
+            if (rain[i].position.y < -10) {
+                rain[i].position.y = 20;
             }
         }
     }
+
+ 
     
     
 
@@ -506,6 +501,12 @@ function onDocumentKeyDown(event) {
             break;
 
         case 82: //r
+               
+            if((level == 2 || level == 3 )){ // rain.length para evitar spam de chuva
+
+                switch_rain_snow();
+
+            }
             if(all_cheats_used < Object.keys(cheatcodes).length){
                 cheatcode_input += "r";
 
@@ -532,13 +533,6 @@ function onDocumentKeyDown(event) {
             break;
     }
 
-    
-    /*Se o input do cheatcode for igual a 7(comprimento máximo de um cheatcode),
-    */
-    if (cheatcode_input.length > 7) {
-        cheatcode_input = "";
-        
-    }
 }
 
 
@@ -1069,6 +1063,9 @@ function Change_Level(){
 
     //Limpar o array de animais do nível anterior
     ANIMALS_LEVEL.length = 0;
+
+
+    rain.length = 0;
                 
     //Remover todos os elementos da cena exceto o revolver e as luzes
     // Para o jogador não ter que apanhar o revolver novamente
@@ -1170,7 +1167,10 @@ function createTimer(){
 function switch_day_night(){
 
     if (night == false) {
-        sceneElements.renderer.setClearColor(0x000000 , 1.0);
+        if (!israin || (level == 1 || level == 4)) {
+            sceneElements.renderer.setClearColor(0x708090, 1.0);
+        }
+     
         night = true;
 
         sceneElements.sceneGraph.getObjectByName("ambient_light").intensity = 0;
@@ -1179,7 +1179,10 @@ function switch_day_night(){
         sceneElements.sceneGraph.getObjectByName("spot_light3").intensity = 40;
 
     }else{
-        sceneElements.renderer.setClearColor(0x87CEEB, 1.0);
+        if (!israin || (level == 1 || level == 4)) {
+            sceneElements.renderer.setClearColor(0x87CEEB, 1.0);
+
+        }
         night = false;
 
         sceneElements.sceneGraph.getObjectByName("ambient_light").intensity = 0.7;
@@ -1216,10 +1219,84 @@ function Cheatcodes(cheatcode){
         }
         cheatcode_input = ""; //Limpa o input 
         all_cheats_used++;
+
+        let cheatcode_activaded = document.createElement("h1");
+        cheatcode_activaded.innerHTML = "Cheatcode Activated";
+        cheatcode_activaded.style.position = "absolute";
+        cheatcode_activaded.style.top = "50%";
+        cheatcode_activaded.style.left = "40%";
+        cheatcode_activaded.style.animation = "blink 1s infinite";
+        document.body.appendChild(cheatcode_activaded);
+
+
+        setTimeout(function() {
+            document.body.removeChild(cheatcode_activaded);
         
+        }, 3000);
+
+
     }
 
   
+}
+
+
+
+function switch_rain_snow(){
+    if (!israin ) {
+
+            create_Rain_Snow();
+            israin = true;
+
+
+    }else{
+        if (night) {
+            sceneElements.renderer.setClearColor(0x000000 , 1.0);
+            
+        }else{
+            sceneElements.renderer.setClearColor(0x87CEEB, 1.0);
+        }
+        rain.forEach(element => {
+            sceneElements.sceneGraph.remove(element);
+        });
+
+        rain.length = 0;
+        israin = false;
+
+    }
+
+
+
+}
+
+
+
+function create_Rain_Snow(){
+    let element;
+    const geometry = new THREE.SphereGeometry(0.5);
+
+    sceneElements.renderer.setClearColor(0x708090, 1.0);
+
+
+    if (level == 2) {
+        const material = new THREE.MeshBasicMaterial({color: 0x0000FF}); //Pingo de chuva
+        element = new THREE.Mesh(geometry, material);
+    }else if (level == 3) {
+        element = new createMesh(geometry, "snow.jpg"); //Floco de neve
+    }
+
+    for (let i = 0; i < 2000; i++) {
+        element = element.clone();
+        element.position.set( 
+            Math.random() * 1000 - 500, //Math.random() * comprimento_terreno - comprimento_terreno/2;
+            Math.random() * 600,      
+            Math.random() * 700 - 350  //Math.random() * largura_terreno - largura_terreno/2;               
+
+        );
+        sceneElements.sceneGraph.add(element);
+        rain.push(element);
+    }
+
 }
 
 

@@ -321,9 +321,9 @@ function computeFrame(time) {
     });
    
 
-    console.log(israin);
 
-    if ( israin){
+
+    if ( israin && (level == 2 || level == 3)){
         for (let i = 0; i < rain.length; i++) {
             // Mova o floco de neve para baixo
             rain[i].position.y -= 0.5; // Altere a velocidade de queda ajustando este valor
