@@ -9,7 +9,7 @@ export function createObjects(model,level,n_bullets,mode,tag){
             break;
 
         case "revolver":
-              model = createRevolver();
+              model = createRevolver(tag);
                 break;
 
 
@@ -136,11 +136,21 @@ function createTable(level,n_bullets,mode){
 }
 
 
-function createRevolver() {
+function createRevolver(tag) {
+    let grip_color;
+    let revolver_color;
+    
+
+    if(tag == "enemy"){
+        grip_color = 0xFFFFFF; //Branco
+        revolver_color = 0xE5B80B; //Dourado
+        
+    }
+    else{
+        grip_color = 0x000000; //Preto
+        revolver_color = "rgb(89.6,89.6,89.6)"; //Prateado  ambiente brilhante
+    }
   
-    let grip_color = 0x000000; //Preto
-    let revolver_color = "rgb(89.6,89.6,89.6)"; //Prateado  ambiente brilhante
- 
 
 
     //Punho do revolver

@@ -25,13 +25,12 @@ let camera_rotate_right = false;
 let left =  document.getElementById("left");
 let right = document.getElementById("right");
 
-const ANIMALS_LEVEL = [];
-const ENEMIES_LEVEL = [];
+const TARGETS_LEVEL = [];
+
 const mode = "game";
 
 
-let ANIMALS = [];
-let ENEMIES = [];
+let TARGETS = [];
 
 
 //Score
@@ -50,11 +49,11 @@ let mouse = new THREE.Vector2();
 
 let cheatcode_input = "";
 
-let animals_count;
+let targets_count;
 
-let enemies_count;
 
-let animals_count_text = document.getElementById("animals_count");
+
+let targets_count_text = document.getElementById("targets_count");
 
 let camera_look = 0;
 
@@ -62,6 +61,11 @@ let camera_look = 0;
 let game_time= 30;
 
 let show_time = document.getElementById("timer");
+
+
+let player_hp = 100;
+
+let player_hp_text = document.getElementById("Health");
 
 
 const sceneElements = {
@@ -137,8 +141,8 @@ const helper = {
         helper.sound = sound;
 
 
-        const animal_sound = new THREE.Audio( listener );
-        helper.animal_sound = animal_sound;
+        const target_death_sound = new THREE.Audio( listener );
+        helper.target_death_sound = target_death_sound;
 
 
 
@@ -189,8 +193,6 @@ const helper = {
 const scene = {
     load3DObjects: function(sceneGraph) {
 
-
-
       if(israin==true && (level == 2 || level == 3)){
         sceneElements.renderer.setClearColor(0x708090, 1.0);
         create_Rain_Snow();
@@ -207,13 +209,12 @@ const scene = {
        
        const BULLETS = LEVEL[0]
        const ENV_ELEMENTS = LEVEL[1];
+
+
+
+       TARGETS = LEVEL[2];
        
-       if (level !=4) {
-         ANIMALS = LEVEL[2];
-        
-       }else{
-         ENEMIES = LEVEL[2];
-       }
+      
     
 
 
@@ -287,123 +288,104 @@ const scene = {
 
          }
         
-        if (level!=4){
-            animals_count = ANIMALS.length;
-            animals_count_text.innerHTML = "Animals: " + animals_count;
-    
-            let duck_id = 1;
-            let fox_id = 1;
-            let boar_id = 1;
-            let vulture_id = 1;
-            let coyote_id = 1;
-               //Adicionar animais á cena
-           for(let i = 0; i < animals_count; i++){
-                  const animal = ANIMALS[i];
-                  const animal_name = Object.keys(animal)[0];
-                  const animal_pos = animal[animal_name];
-        
-                  let animal_model = null;
-    
-    
-                  switch (animal_name) {
-                    case "duck":
-                        animal_model = create_Animal_Model(animal_name);
-                        animal_model.scale.set(0.6, 0.6, 0.6);
-                        animal_model.rotation.y = -0.5 * Math.PI;
-                        animal_model.name = animal_name + duck_id;
-                        duck_id++;
-                        break;
-                    case "fox":
-                        animal_model = create_Animal_Model(animal_name,level);
-                        animal_model.rotation.y = 0.5 *Math.PI;
-                        animal_model.name = animal_name + fox_id;
-                        fox_id++;
-                        break;
-    
-                    case "boar":
-                        animal_model = create_Animal_Model(animal_name);
-                        animal_model.rotation.y = 0.5 * Math.PI;
-                        animal_model.name = animal_name + boar_id;
-                        boar_id++;
-        
-                        break;
-    
-                    case "vulture":
-                        animal_model = create_Animal_Model(animal_name);
-                        animal_model.rotation.y = 0.5 * Math.PI;
-                        animal_model.name = animal_name + vulture_id;
-                        vulture_id++;
-                        break;
-    
-                    case "coyote":
-                        animal_model = create_Animal_Model(animal_name);
-                        animal_model.rotation.y = 0.5 * Math.PI;
-                        animal_model.name = animal_name + coyote_id;
-                        coyote_id++;
-                
-                        break;
-                  }
-        
-              
-        
-                animal_model.position.set(animal_pos[0], animal_pos[1], animal_pos[2]);
-                animal_model.initial_pos = animal_pos[2];
-                sceneGraph.add(animal_model);
+      
+        targets_count = TARGETS.length;
+
+        if (level!=4) {
+            targets_count_text.innerHTML = "Animals: " + targets_count;
             
-    
-                ANIMALS_LEVEL.push(animal_model.name);
-               
-    
-    
-    
-           }
+        }else{
+             
+            targets_count_text.innerHTML = "Enemies: " + targets_count;
+
+            player_hp_text.style.opacity = 1;
             
-        }
-        else{
-            let enemy_id = 1;
-            enemies_count = ENEMIES.length;
-            //Aproveitar o texto de mostrar o número de  animais para mostrar o número de inimigos
-            animals_count_text.innerHTML = "Enemies: " + enemies_count;
 
-
-            let enemy_model = null;
-            for(let i = 0; i < enemies_count; i++){
-                const enemy = ENEMIES[i];
-                const enemy_name = Object.keys(enemy)[0];
-                const enemy_pos = enemy[enemy_name];
-
-                switch (enemy_name) {
-                    case "enemy":
-                        enemy_model = create_Enemy();
-                        enemy_model.name = "enemy" + enemy_id;
-                        enemy_id++;
-                        break;
-                    default:
-                        break;
-                }
-
-                enemy_model.position.set(enemy_pos[0], enemy_pos[1], enemy_pos[2]);
-                sceneGraph.add(enemy_model);
-
-                ENEMIES_LEVEL.push(enemy_model.name);
-
-            }
-
-
-        }
-     
-   
-
-        const table = createObjects("table",level, n_bullets,mode);
-        sceneGraph.add(table);
-
-
-        if (level == 4) {
             const house = createObjects("house",level, n_bullets,mode);
             house.position.set(200, 0, 0);
             sceneGraph.add(house);
-            
         }
+       
+    
+        let duck_id = 1;
+        let fox_id = 1;
+        let boar_id = 1;
+        let vulture_id = 1;
+        let coyote_id = 1;
+        let enemy_id = 1;
+        //Adicionar animais á cena
+        for(let i = 0; i < targets_count; i++){
+            const target = TARGETS[i];
+            const target_name = Object.keys(target)[0];
+            const target_pos = target[target_name];
+  
+            let target_model = null;
+
+
+            switch (target_name) {
+              case "duck":
+                  target_model = create_Animal_Model(target_name);
+                  target_model.scale.set(0.6, 0.6, 0.6);
+                  target_model.rotation.y = -0.5 * Math.PI;
+                  target_model.name = target_name + duck_id;
+                  duck_id++;
+                  break;
+              case "fox":
+                  target_model = create_Animal_Model(target_name,level);
+                  target_model.rotation.y = 0.5 *Math.PI;
+                  target_model.name = target_name + fox_id;
+                  fox_id++;
+                  break;
+
+              case "boar":
+                  target_model = create_Animal_Model(target_name);
+                  target_model.rotation.y = 0.5 * Math.PI;
+                  target_model.name = target_name + boar_id;
+                  boar_id++;
+  
+                  break;
+
+              case "vulture":
+                  target_model = create_Animal_Model(target_name);
+                  target_model.rotation.y = 0.5 * Math.PI;
+                  target_model.name = target_name + vulture_id;
+                  vulture_id++;
+                  break;
+
+              case "coyote":
+                  target_model = create_Animal_Model(target_name);
+                  target_model.rotation.y = 0.5 * Math.PI;
+                  target_model.name = target_name + coyote_id;
+                  coyote_id++;
+          
+                  break;
+
+            case "enemy":
+                target_model = create_Enemy();
+                target_model.name = target_name + enemy_id;
+                enemy_id++;
+                break;
+                 
+            }
+  
+        
+  
+          target_model.position.set(target_pos[0], target_pos[1], target_pos[2]);
+          target_model.initial_pos = target_pos[2];
+          sceneGraph.add(target_model);
+      
+
+          TARGETS_LEVEL.push(target_model.name);
+         
+
+
+
+     }
+              
+          
+    const table = createObjects("table",level, n_bullets,mode);
+    sceneGraph.add(table);
+
 
     }
 };
@@ -422,15 +404,32 @@ function computeFrame(time) {
     }
 
  
+   
+    TARGETS_LEVEL.forEach(target => {
 
-    ANIMALS_LEVEL.forEach(animal => {
-        const animal_model = sceneElements.sceneGraph.getObjectByName(animal);
-       
-        if (animal_model != undefined) {
-            animate_animal(animal_model,delta);
+        if (level != 4) {
+            const animal_model = sceneElements.sceneGraph.getObjectByName(target);
+           
+            if (animal_model != undefined) {
+                animate_animal(animal_model,delta);
+            }
+            
         }
-        
+
+        else{
+            const enemy = sceneElements.sceneGraph.getObjectByName(target);
+            if (enemy != undefined) {
+                enemy.rotation.y += 0.01;
+            }
+        }
     });
+            
+   
+
+
+
+
+    
 
 
     if ( israin ){
@@ -719,7 +718,7 @@ function fire_gun(event) {
 
        
 
-        if (n_bullets == 0 && animals_count > 0) {
+        if (n_bullets == 0 && targets_count > 0) {
 
             Game_Over();
             
@@ -727,7 +726,7 @@ function fire_gun(event) {
         }
 
 
-        if (animals_count == 0) {
+        if (targets_count == 0) {
             level++;
 
             //Adicionar tempo extra ao passar de nível
@@ -788,41 +787,56 @@ function play_theme(){
 function shoot(){
     let intersects = raycaster.intersectObjects(sceneElements.sceneGraph.children, true);
     let target = intersects[0] ? intersects[0] : null;
+
+    let target_shooted;
     if (target == null) {
         return;
     }
-    let animal_hunted;
 
-    const All_Animals = ["boar", "fox", "duck", "vulture","coyote"];
-    
-    for (let i = 0; i < All_Animals.length; i++) {
-        if (target.object.name.includes(All_Animals[i])) {
-            animal_hunted = All_Animals[i];
-            break;
-        }
-        else if (i == All_Animals.length - 1) {
-            return; //Se o target não for um animal, sai da função
-        }
+
+    if (level!=4) {
+        const All_Animals = ["boar", "fox", "duck", "vulture","coyote"];
         
+        for (let i = 0; i < All_Animals.length; i++) {
+            if (target.object.name.includes(All_Animals[i])) {
+                target_shooted = All_Animals[i];
+                break;
+            }
+            else if (i == All_Animals.length - 1) {
+                return; //Se o target não for um animal, sai da função
+            }
+            
+        }
+    }else{
+        if (target.object.name.includes("enemy")) {
+            target_shooted = "enemy";
+
+        }
+        else{
+            return;
+        }
+
     }
 
-    shoot_animal(animal_hunted);
 
-    let animal_component = target.object.parent;
 
-    /* Vai procurar a componente pai da componente do animal que o raycaster atingiu
-       até o pai desta ser a cena do jogo, ou seja,
-       até  a compente ser o próprio animal,
-       para removê-lo da cena simulando assim a sua morte 
+    shoot_target(target_shooted);
+    let target_component = target.object.parent;
+
+    /* Vai procurar a componente pai da componente do alvo  que o raycaster atingiu
+        até o pai desta ser a cena do jogo, ou seja,
+        até  a compente ser o próprio alvo (inimigo ou animal),
+        para removê-lo da cena simulando assim a sua morte 
     */
     while(true){
-        if (animal_component.parent.name == "sceneGraph") {
+        if (target_component.parent.name == "sceneGraph") {
             break;
         }
-        animal_component = animal_component.parent;
+        target_component = target_component.parent;
     };
+    
+    sceneElements.sceneGraph.remove(target_component);
 
-    sceneElements.sceneGraph.remove(animal_component);
 
     
 } 
@@ -833,7 +847,7 @@ function End_game(){
     if(helper.music.isPlaying){
         helper.music.stop();
         helper.sound.stop();
-        helper.animal_sound.stop();
+        helper.target_death_sound.stop();
        
     }
 
@@ -1031,19 +1045,24 @@ function game_over_theme(){
 }
 
 
-function shoot_animal(animal){
+function shoot_target(target){
 
-    let animal_death_sound = "../sounds/" + animal + "_death.mp3";
+    let score_points;
 
-    if (animal_death_sound != "../sounds/") {
+
+    level != 4 ? score_points = 100 : score_points = 200; //Pontos por matar um animal ou inimigo
+
+    let target_death_sound = "../sounds/" + target + "_death.mp3";
+
+    if (target_death_sound != "../sounds/") {
 
         //Caso outro som de morte esteja a ser reproduzido, parar a reprodução
-        if(helper.animal_sound.isPlaying){
-            helper.animal_sound.stop();
+        if(helper.target_death_sound.isPlaying){
+            helper.target_death_sound.stop();
         }
         const audioLoader = new THREE.AudioLoader();
-        audioLoader.load( animal_death_sound, function( buffer ) {
-            const sound = helper.animal_sound;
+        audioLoader.load( target_death_sound, function( buffer ) {
+            const sound = helper.target_death_sound;
             sound.setBuffer( buffer );
             sound.setLoop( false );
             sound.setVolume( 0.5 );
@@ -1053,12 +1072,21 @@ function shoot_animal(animal){
         
         //Atualizar o score e o número de animais
         
-        score += 100 + game_time; //Fórmula de cálculo do score
-        animals_count--;
+        score += score_points + game_time; //Fórmula de cálculo do score
+        targets_count--;
 
         
         score_text.innerHTML = "Score: " + score;
-        animals_count_text.innerHTML = "Animals: " + animals_count;    
+
+
+        if (level != 4) {
+            targets_count_text.innerHTML = "Animals: " + targets_count;
+            
+        }
+        else{
+            targets_count_text.innerHTML = "Enemies: " + targets_count;
+        }
+           
         
     }
 
@@ -1149,7 +1177,7 @@ function Change_Level(){
     let elements_remove = []; 
 
     //Limpar o array de animais do nível anterior
-    ANIMALS_LEVEL.length = 0;
+    TARGETS_LEVEL.length = 0;
 
 
     rain.length = 0;
@@ -1385,6 +1413,11 @@ function create_Rain_Snow(){
     }
 
 }
+
+
+
+
+
 
 
 
