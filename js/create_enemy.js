@@ -11,26 +11,37 @@ export function create_Enemy() {
     const head_geometry = new THREE.SphereGeometry(3);
     const head_material = new THREE.MeshToonMaterial({ color: 0xCFFE0BD }); // Cor de pele Caucasiana
     const head = new THREE.Mesh(head_geometry, head_material);
+    head.castShadow = true;
+    head.name = "enemy_head";
 
 
     //Olhos do humano
     const left_eye_geometry = new THREE.SphereGeometry(0.5);
     const left_eye_material = new THREE.MeshToonMaterial({ color: 0xFFFFFF }); // Branco
     const left_eye = new THREE.Mesh(left_eye_geometry, left_eye_material);
+    left_eye.castShadow = true;
+    left_eye.name = "enemy_left_eye";
     const right_eye = left_eye.clone();
+    right_eye.name = "enemy_right_eye";
 
 
     //Iris do humano
     const left_iris_geometry = new THREE.SphereGeometry(0.3);
     const left_iris_material = new THREE.MeshToonMaterial({ color: 0xA1CAF1 }); // Azul bebé
     const left_iris = new THREE.Mesh(left_iris_geometry, left_iris_material);
+    left_iris.castShadow = true;
+    left_iris.name = "enemy_left_iris";
     const right_iris = left_iris.clone();
+    right_iris.name = "enemy_right_iris";
 
     // Pulupilas do humano
     const left_pupil_geometry = new THREE.SphereGeometry(0.15);
     const left_pupil_material = new THREE.MeshToonMaterial({ color: 0x000000 }); // Preto
     const left_pupil = new THREE.Mesh(left_pupil_geometry, left_pupil_material);
+    left_pupil.castShadow = true;
+    left_pupil.name = "enemy_left_pupil";
     const right_pupil = left_pupil.clone();
+    right_pupil.name = "enemy_right_pupil";
 
 
 
@@ -38,29 +49,43 @@ export function create_Enemy() {
     const bandana_geometry = new THREE.CylinderGeometry(2, 2, 3);
     const bandana_material = new THREE.MeshToonMaterial({ color: 0xE5B80B }); //Mesma cor que a fita
     const bandana = new THREE.Mesh(bandana_geometry, bandana_material);
+    bandana.castShadow = true;
+    bandana.name = "enemy_bandana";
 
     //Corpo do humano
     const body_geometry = new THREE.CylinderGeometry(2, 2, 5.8);
     const body_material = new THREE.MeshToonMaterial({ color: body_color });
     const body = new THREE.Mesh(body_geometry, body_material);
+    body.castShadow = true;
+    body.name = "enemy_body";
    
     //Pernas do humano
     const left_leg_geometry = new THREE.CylinderGeometry(1.5, 1.5, 5);
     const left_leg_material = new THREE.MeshToonMaterial({ color: leg_color });
     const left_leg = new THREE.Mesh(left_leg_geometry, left_leg_material);
+    left_leg.castShadow = true;
+    left_leg.name = "enemy_left_leg";
     const right_leg = left_leg.clone();
+    right_leg.name = "enemy_right_leg";
 
     //Braços do humano
     const left_arm_geometry = new THREE.CylinderGeometry(1, 1, 7);
     const left_arm_material = new THREE.MeshToonMaterial({ color: body_color }); //A cor dos braços é a mesma do corpo
     const left_arm = new THREE.Mesh(left_arm_geometry, left_arm_material);
+    left_arm.rotation.z = Math.PI / 2;
+    left_arm.castShadow = true;
+    left_arm.name = "enemy_left_arm";
     const right_arm = left_arm.clone();
+    right_arm.name = "enemy_right_arm";
 
     //Sapatos do humano
-    const left_shoe_geometry = new THREE.BoxGeometry(0.5, 3, 3);
+    const left_shoe_geometry = new THREE.BoxGeometry(2, 2.2, 2);
     const left_shoe_material = new THREE.MeshToonMaterial({ color: 0x964B00 }); // Castanho
     const left_shoe = new THREE.Mesh(left_shoe_geometry, left_shoe_material);
+    left_shoe.castShadow = true;
+    left_shoe.name = "enemy_left_shoe";
     const right_shoe = left_shoe.clone();
+    right_shoe.name = "enemy_right_shoe";
 
 
     const hat = createObjects("hat",4,8,"game","enemy");
@@ -87,16 +112,17 @@ export function create_Enemy() {
     right_pupil.position.set(right_iris.position.x -0.2, right_iris.position.y - 0.1, right_iris.position.z);
     
     bandana.position.set(head.position.x + 1.5, head.position.y - 15.5, head.position.z);
-
+    
+    
     body.position.y = 8.5;
 
-    left_leg.position.set(0, 3, 1);
-    right_leg.position.set(0, 3, -1);
+    left_leg.position.set(body.position.x, body.position.y - 14, body.position.z - 0.5);
+    right_leg.position.set(left_leg.position.x, left_leg.position.y, -left_leg.position.z );
 
-    left_arm.position.set(3.5, 10, 2.5);
-    left_arm.rotation.z = Math.PI / 2;
-    right_arm.position.set(3.5, 10, -2.5);
-    right_arm.rotation.z = Math.PI / 2;
+    left_arm.position.set(body.position.x +2.5 , body.position.y - 6.2, body.position.z + 3);
+    
+    right_arm.position.set(left_arm.position.x, left_arm.position.y, -left_arm.position.z);
+  
 
 
 
@@ -106,8 +132,8 @@ export function create_Enemy() {
     let revolver_color = "rgb(89.6,89.6,89.6)"; //Prateado  ambiente brilhante
     */
 
-    left_shoe.position.set(left_leg.position.x, 0, left_leg.position.z);
-    right_shoe.position.set(right_leg.position.x, 0, right_leg.position.z);
+    left_shoe.position.set(left_leg.position.x + 0.4, left_leg.position.y + 3 , left_leg.position.z);
+    right_shoe.position.set(right_leg.position.x + 0.4, right_leg.position.y + 3 , right_leg.position.z);
 
     left_shoe.rotation.z = Math.PI / 2;
     right_shoe.rotation.z = Math.PI / 2;
@@ -129,15 +155,15 @@ export function create_Enemy() {
  
 
     
-
-
+    left_leg.add(left_shoe);
+    right_leg.add(right_shoe);
+    body.add(left_leg);
+    body.add(right_leg);
     enemy.add(body);
-    enemy.add(left_leg);
-    enemy.add(right_leg);
-    enemy.add(left_arm);
-    enemy.add(right_arm);
-    enemy.add(left_shoe);
-    enemy.add(right_shoe);
+
+    body.add(left_arm);
+    body.add(right_arm);
+
 
     const revolver =  createObjects("revolver",5,8);
    
