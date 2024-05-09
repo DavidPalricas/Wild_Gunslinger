@@ -6,6 +6,7 @@ import { create_Animal_Model } from "./create_animals.js";
 import { create_Env_models } from "./create_env_elements.js";
 import { createObjects } from "./create_objects.js";
 import { createMesh } from "./get_texture.js";
+import { create_Enemy } from "./create_enemy.js";
 
 
 const rain = [];
@@ -25,8 +26,12 @@ let left =  document.getElementById("left");
 let right = document.getElementById("right");
 
 const ANIMALS_LEVEL = [];
+const ENEMIES_LEVEL = [];
 const mode = "game";
 
+
+let ANIMALS = [];
+let ENEMIES = [];
 
 
 //Score
@@ -46,6 +51,8 @@ let mouse = new THREE.Vector2();
 let cheatcode_input = "";
 
 let animals_count;
+
+let enemies_count;
 
 let animals_count_text = document.getElementById("animals_count");
 
@@ -200,8 +207,14 @@ const scene = {
        
        const BULLETS = LEVEL[0]
        const ENV_ELEMENTS = LEVEL[1];
-
-       const ANIMALS = LEVEL[2];
+       
+       if (level !=4) {
+         ANIMALS = LEVEL[2];
+        
+       }else{
+         ENEMIES = LEVEL[2];
+       }
+    
 
 
        n_bullets = BULLETS[0]["bullets"];
@@ -250,6 +263,7 @@ const scene = {
                     element_model.name = "cactus" + cactus_id;
                     cactus_id++;
                     break;
+
                        
     
                 default:
@@ -272,76 +286,112 @@ const scene = {
 
 
          }
-
-        animals_count = ANIMALS.length;
-        animals_count_text.innerHTML = "Animals: " + animals_count;
-
-        let duck_id = 1;
-        let fox_id = 1;
-        let boar_id = 1;
-        let vulture_id = 1;
-        let coyote_id = 1;
-           //Adicionar animais á cena
-       for(let i = 0; i < animals_count; i++){
-              const animal = ANIMALS[i];
-              const animal_name = Object.keys(animal)[0];
-              const animal_pos = animal[animal_name];
-    
-              let animal_model = null;
-
-
-              switch (animal_name) {
-                case "duck":
-                    animal_model = create_Animal_Model(animal_name);
-                    animal_model.scale.set(0.6, 0.6, 0.6);
-                    animal_model.rotation.y = -0.5 * Math.PI;
-                    animal_model.name = animal_name + duck_id;
-                    duck_id++;
-                    break;
-                case "fox":
-                    animal_model = create_Animal_Model(animal_name,level);
-                    animal_model.rotation.y = 0.5 *Math.PI;
-                    animal_model.name = animal_name + fox_id;
-                    fox_id++;
-                    break;
-
-                case "boar":
-                    animal_model = create_Animal_Model(animal_name);
-                    animal_model.rotation.y = 0.5 * Math.PI;
-                    animal_model.name = animal_name + boar_id;
-                    boar_id++;
-    
-                    break;
-
-                case "vulture":
-                    animal_model = create_Animal_Model(animal_name);
-                    animal_model.rotation.y = 0.5 * Math.PI;
-                    animal_model.name = animal_name + vulture_id;
-                    vulture_id++;
-                    break;
-
-                case "coyote":
-                    animal_model = create_Animal_Model(animal_name);
-                    animal_model.rotation.y = 0.5 * Math.PI;
-                    animal_model.name = animal_name + coyote_id;
-                    coyote_id++;
-            
-                    break;
-              }
-    
-          
-    
-            animal_model.position.set(animal_pos[0], animal_pos[1], animal_pos[2]);
-            animal_model.initial_pos = animal_pos[2];
-            sceneGraph.add(animal_model);
         
+        if (level!=4){
+            animals_count = ANIMALS.length;
+            animals_count_text.innerHTML = "Animals: " + animals_count;
+    
+            let duck_id = 1;
+            let fox_id = 1;
+            let boar_id = 1;
+            let vulture_id = 1;
+            let coyote_id = 1;
+               //Adicionar animais á cena
+           for(let i = 0; i < animals_count; i++){
+                  const animal = ANIMALS[i];
+                  const animal_name = Object.keys(animal)[0];
+                  const animal_pos = animal[animal_name];
+        
+                  let animal_model = null;
+    
+    
+                  switch (animal_name) {
+                    case "duck":
+                        animal_model = create_Animal_Model(animal_name);
+                        animal_model.scale.set(0.6, 0.6, 0.6);
+                        animal_model.rotation.y = -0.5 * Math.PI;
+                        animal_model.name = animal_name + duck_id;
+                        duck_id++;
+                        break;
+                    case "fox":
+                        animal_model = create_Animal_Model(animal_name,level);
+                        animal_model.rotation.y = 0.5 *Math.PI;
+                        animal_model.name = animal_name + fox_id;
+                        fox_id++;
+                        break;
+    
+                    case "boar":
+                        animal_model = create_Animal_Model(animal_name);
+                        animal_model.rotation.y = 0.5 * Math.PI;
+                        animal_model.name = animal_name + boar_id;
+                        boar_id++;
+        
+                        break;
+    
+                    case "vulture":
+                        animal_model = create_Animal_Model(animal_name);
+                        animal_model.rotation.y = 0.5 * Math.PI;
+                        animal_model.name = animal_name + vulture_id;
+                        vulture_id++;
+                        break;
+    
+                    case "coyote":
+                        animal_model = create_Animal_Model(animal_name);
+                        animal_model.rotation.y = 0.5 * Math.PI;
+                        animal_model.name = animal_name + coyote_id;
+                        coyote_id++;
+                
+                        break;
+                  }
+        
+              
+        
+                animal_model.position.set(animal_pos[0], animal_pos[1], animal_pos[2]);
+                animal_model.initial_pos = animal_pos[2];
+                sceneGraph.add(animal_model);
+            
+    
+                ANIMALS_LEVEL.push(animal_model.name);
+               
+    
+    
+    
+           }
+            
+        }
+        else{
+            let enemy_id = 1;
+            enemies_count = ENEMIES.length;
+            //Aproveitar o texto de mostrar o número de  animais para mostrar o número de inimigos
+            animals_count_text.innerHTML = "Enemies: " + enemies_count;
 
-            ANIMALS_LEVEL.push(animal_model.name);
-           
+
+            let enemy_model = null;
+            for(let i = 0; i < enemies_count; i++){
+                const enemy = ENEMIES[i];
+                const enemy_name = Object.keys(enemy)[0];
+                const enemy_pos = enemy[enemy_name];
+
+                switch (enemy_name) {
+                    case "enemy":
+                        enemy_model = create_Enemy();
+                        enemy_model.name = "enemy" + enemy_id;
+                        enemy_id++;
+                        break;
+                    default:
+                        break;
+                }
+
+                enemy_model.position.set(enemy_pos[0], enemy_pos[1], enemy_pos[2]);
+                sceneGraph.add(enemy_model);
+
+                ENEMIES_LEVEL.push(enemy_model.name);
+
+            }
 
 
-
-       }
+        }
+     
    
 
         const table = createObjects("table",level, n_bullets,mode);

@@ -193,8 +193,21 @@ const LEVEL3 = [CONFIG,ENV_OBJECTS, ANIMALS];
 
 
 
+const ENEMIES = [{"enemy": [100,0,0]},
+                 {"enemy": [200,0,100]},
+                 {"enemy": [300,0,-100]},
+                 {"enemy": [100,0,20]},
+                 {"enemy": [100,0,30]},
+                 {"enemy": [100,0,50]},
+                 {"enemy": [100,0,40]},
+                 {"enemy": [-20,0,0]},
 
-const LEVEL4 = [CONFIG,ENV_OBJECTS, ANIMALS];
+];
+
+
+
+
+const LEVEL4 = [CONFIG,ENV_OBJECTS, ENEMIES];
 
 
 export const MAP = [LEVEL1,LEVEL2,LEVEL3,LEVEL4];
