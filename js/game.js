@@ -12,7 +12,7 @@ import { create_Enemy } from "./create_enemy.js";
 const rain = [];
 let israin = false;
 
-let cheatcodes = {"django":false,"draw":false,"deadeye":false};
+let cheatcodes = {"django":false,"draw":false,"deadeye":false,"godmode":false};
 
 let all_cheats_used = 0;
 
@@ -31,6 +31,9 @@ const mode = "game";
 
 
 let TARGETS = [];
+
+
+let player_alerted = false;
 
 
 //Score
@@ -135,6 +138,7 @@ const helper = {
        //Audio
         const listener = new THREE.AudioListener();
         camera.add(listener);
+        camera.listener = listener;
 
 
         const sound = new THREE.Audio( listener );
@@ -291,14 +295,16 @@ const scene = {
       
         targets_count = TARGETS.length;
 
-        if (level!=4) {
+        if (level!= 4) {
             targets_count_text.innerHTML = "Animals: " + targets_count;
             
         }else{
              
-            targets_count_text.innerHTML = "Enemies: " + targets_count;
+            targets_count_text.innerHTML = "Deadlocks: " + targets_count;
 
             player_hp_text.style.opacity = 1;
+
+            createTextbox();
             
 
             const house = createObjects("house",level, n_bullets,mode);
@@ -363,13 +369,20 @@ const scene = {
             case "enemy":
                 target_model = create_Enemy();
                 target_model.name = target_name + enemy_id;
+
+                //Adicionar som de tiro ao inimigo
+                const  enemy_shoot_sound = new THREE.Audio( sceneElements.camera.listener );
+                target_model.shoot_sound = enemy_shoot_sound;
                 enemy_id++;
                 break;
                  
             }
   
         
-  
+          if (target.hasOwnProperty("rotation")) {
+                target_model.rotation.y = target["rotation"];
+          }
+
           target_model.position.set(target_pos[0], target_pos[1], target_pos[2]);
           target_model.initial_pos = target_pos[2];
           sceneGraph.add(target_model);
@@ -416,27 +429,33 @@ function computeFrame(time) {
             
         }
 
-        else{
+        else if (level == 4 && player_alerted == true){
             const enemy = sceneElements.sceneGraph.getObjectByName(target);
             if (enemy != undefined) {
-                enemy.rotation.y += 0.01;
+                if (enemy.can_shoot && enemy.bullets > 0) {
+                    enemy.can_shoot = false;
+                    animate_Enemy(enemy);
+
+                    setTimeout(function() {
+                        enemy.can_shoot = true;
+                    }
+                    , 2000);
+                    
+                }
+             
             }
         }
     });
             
    
 
-
-
-
-    
-
-
     if ( israin ){
         for (let i = 0; i < rain.length; i++) {
-            // Mova o floco de neve para baixo
-            rain[i].position.y -= 0.5; // Altere a velocidade de queda ajustando este valor
-            // Se o floco de neve atingir o chão, coloque-o de volta no topo
+       
+
+            level == 2 ? rain[i].position.y -= 1 : rain[i].position.y -= 0.5; // Altere a velocidade de queda ajustando este valor
+            
+            // Se o floco de neve/ pingo de chuva colidir com o chão, ele "cai" novamente do céu
             if (rain[i].position.y < -10) {
                 rain[i].position.y = 20;
             }
@@ -504,6 +523,7 @@ function onDocumentKeyDown(event) {
             if(all_cheats_used < Object.keys(cheatcodes).length){
                 cheatcode_input += "e";
                 Cheatcodes("deadeye");
+                Cheatcodes("godmode");
 
             }
             if (!gun_grabbed){
@@ -653,94 +673,74 @@ function Grab_Gun() {
 
 function fire_gun(event) {
     const revolver = sceneElements.sceneGraph.getObjectByName("revolver");
-    if (n_bullets > 0 && gun_grabbed == true && revolver != undefined) {
-        shoot();
+    if (n_bullets > 0 && gun_grabbed == true && revolver != undefined ) {
+
+        if((level == 4 && player_alerted == true) || level != 4){
+            shoot();
 
 
-        const audioLoader = new THREE.AudioLoader();
-        audioLoader.load( '../sounds/revolver_shot.mp3', function( buffer ) {
-            const sound = helper.sound;
-            sound.setBuffer( buffer );
-            sound.setLoop( false );
-            sound.setVolume( 0.5 );
-            sound.play();
-        });
+            const audioLoader = new THREE.AudioLoader();
+            audioLoader.load( '../sounds/revolver_shot.mp3', function( buffer ) {
+                const sound = helper.sound;
+                sound.setBuffer( buffer );
+                sound.setLoop( false );
+                sound.setVolume( 0.5 );
+                sound.play();
+            });
 
-         
+            
 
+            
+            if (!cheatcodes["draw"]) {
+                const table_body = sceneElements.sceneGraph.getObjectByName("table").getObjectByName("body");
         
-        if (!cheatcodes["draw"]) {
-            const table_body = sceneElements.sceneGraph.getObjectByName("table").getObjectByName("body");
-     
 
-            table_body.remove(table_body.getObjectByName("bullet" + n_bullets));
-            
-    
-           
-        
-            n_bullets--;
-
-
-       
-      
-
-        
-            //Atualizar o número de balas no ecrã
-            bullet.innerHTML = "X" + n_bullets;
-    
-            
-        }
-
-
-        const bullet_fired = createObjects("bullet",level, n_bullets,mode);
-
-        bullet_fired.scale.set(0.2, 0.2, 0.2);
-        bullet_fired.rotation.z = -0.5 * Math.PI;
-        bullet_fired.name = "bullet_fired"
-
-        const gun_fire_effect = new THREE.PointLight(0xFFA500, 50, 10);
-        gun_fire_effect.decay = 2;
-        gun_fire_effect.castShadow = true;
-        gun_fire_effect.name = "gun_fire_effect";
-
-        bullet_fired.position.set(revolver.position.x + 3, revolver.position.y + 0.8, revolver.position.z);
-        gun_fire_effect.position.set(bullet_fired.position.x-0.5, bullet_fired.position.y, bullet_fired.position.z);
-
-        bullet_fired.add(gun_fire_effect);
-        sceneElements.sceneGraph.add(bullet_fired);
-    
-    
-    
-        setTimeout(function() {
-            sceneElements.sceneGraph.remove(bullet_fired);
-            
-        }, 200);
-
-       
-
-        if (n_bullets == 0 && targets_count > 0) {
-
-            Game_Over();
-            
-            
-        }
-
-
-        if (targets_count == 0) {
-            level++;
-
-            //Adicionar tempo extra ao passar de nível
-            game_time += 10;
-    
-            if (level > MAP.length) {
-                End_game();
-              
-            } else {
-                Change_Level();
+                table_body.remove(table_body.getObjectByName("bullet" + n_bullets));
                 
-            }      
-        }
+        
+            
+            
+                n_bullets--;
 
+
+        
+        
+
+            
+                //Atualizar o número de balas no ecrã
+                bullet.innerHTML = "X" + n_bullets;
+        
+                
+            }
+
+            revolver_shoot_effect(revolver,"player");
+        
+
+        
+
+            if ((n_bullets == 0 && targets_count > 0)) {
+
+                Game_Over();
+                
+                
+            }
+
+
+            if (targets_count == 0) {
+                level++;
+
+                //Adicionar tempo extra ao passar de nível
+                game_time += 10;
+        
+                if (level > MAP.length) {
+                    End_game();
+                
+                } else {
+                    Change_Level();
+                    
+                }      
+            }
+        }
       
         
     }
@@ -1084,7 +1084,7 @@ function shoot_target(target){
             
         }
         else{
-            targets_count_text.innerHTML = "Enemies: " + targets_count;
+            targets_count_text.innerHTML = "Deadlocks: " + targets_count;
         }
            
         
@@ -1265,8 +1265,10 @@ function createTimer(){
             
         }
         
-        game_time--;
-        show_time.innerHTML = game_time +"s ";
+        if((level == 4 && player_alerted == true)|| level != 4){
+            game_time--;
+            show_time.innerHTML = game_time +"s ";
+        }
 
         
         
@@ -1331,6 +1333,11 @@ function Cheatcodes(cheatcode){
             game_time = null;
             show_time.innerHTML = "Unlimited";
 
+        }
+        else if (cheatcode == "godmode"){
+            player_hp = null;
+            player_hp_text.innerHTML = "God Mode";
+        
         }
         cheatcode_input = ""; //Limpa o input 
         all_cheats_used++;
@@ -1417,9 +1424,168 @@ function create_Rain_Snow(){
 
 
 
+function animate_Enemy(enemy){
+
+    const enemy_revolver = enemy.getObjectByName("enemy_revolver");
+
+
+    const cube_material = new THREE.MeshBasicMaterial({color: 0xFFFFFF});
+    const cube_geometry = new THREE.BoxGeometry(3, 3, 3);
+    const cube = new THREE.Mesh(cube_geometry, cube_material);
+
+    cube.position.set(enemy_revolver.position.x , enemy_revolver.position.y , enemy_revolver.position.z);
+
+
+    console.log(enemy_revolver.position );
+
+    console.log(cube);
+
+
+    sceneElements.sceneGraph.add(cube);
+
+
+    revolver_shoot_effect(enemy_revolver,"enemy");
 
 
 
 
+
+    enemy.bullets--;
+    const audioLoader = new THREE.AudioLoader();
+    audioLoader.load( '../sounds/revolver_shot.mp3', function( buffer ) {
+    const sound = enemy.shoot_sound;
+    sound.setBuffer( buffer );
+    sound.setLoop( false );
+    sound.setVolume( 0.2 );
+    sound.play();
+    });
+
+
+    if( Math.floor(Math.random() * 8) + 1 == 8){ //Se o número aleatório for 8, o inimigo acertou no jogador
+       
+        if (!cheatcodes["godmode"]) {
+            player_hp -= 25;
+            player_hp_text.innerHTML =  "Health: " + player_hp;
+                        
+            player_hp_text.style.animation = "none"; // Atualizar a animação
+
+          
+            player_hp_text.offsetHeight; // Força o browser a recarregar a animação
+
+            player_hp_text.style.animation = "shot 1s linear ";
+            if (player_hp == 0) {
+                Game_Over();
+                
+            }
+          
+
+        }
+       
+       
+
+    }
+
+        
+      
+
+}
+
+
+
+function revolver_shoot_effect(revolver,tag){
+
+    console.log("Revolver shoot effect");
+    
+    const bullet_fired = createObjects("bullet",level, n_bullets,mode);
+
+    bullet_fired.scale.set(0.2, 0.2, 0.2);
+    bullet_fired.rotation.z = -0.5 * Math.PI;
+  
+
+    const gun_fire_effect = new THREE.PointLight(0xFFA500, 50, 10);
+    gun_fire_effect.decay = 2;
+    gun_fire_effect.castShadow = true;
+   
+    if (tag == "player") {
+        bullet_fired.position.set(revolver.position.x + 3, revolver.position.y + 0.8, revolver.position.z);
+        gun_fire_effect.position.set(bullet_fired.position.x-0.5, bullet_fired.position.y, bullet_fired.position.z);
+   
+ 
+
+        bullet_fired.add(gun_fire_effect);
+        sceneElements.sceneGraph.add(bullet_fired);
+
+
+
+        setTimeout(function() {
+            sceneElements.sceneGraph.remove(bullet_fired);
+            
+        }, 200);
+
+    }
+    else{
+        bullet_fired.position.set(revolver.position.x + 3, revolver.position.y + 2, revolver.position.z);
+        gun_fire_effect.position.set(bullet_fired.position.x-0.5, bullet_fired.position.y, bullet_fired.position.z);
+
+        bullet_fired.add(gun_fire_effect);
+        revolver.add(bullet_fired);
+    
+
+        setTimeout(function() {
+            revolver.remove(bullet_fired);
+            
+        }, 200);
+    }
+
+ 
+}
+
+
+
+function createTextbox(){
+
+
+    const box = document.createElement('div');
+    box.style.position = 'absolute';
+    box.style.width = 50 +  "%"; 
+    box.style.height = 20 + "%";
+    box.style.backgroundColor = "rgba(0, 0, 0, 0.5)";
+    box.style.color = "white";
+    box.style.fontSize = 50;
+    box.style.top = 20 + "%";
+    box.style.left = 25 + "%";
+    box.style.borderRadius = 10 + "px";
+
+    box.style.padding = 20 + "px";
+
+    box.style.alignContent = "center";
+
+    const text = document.createElement('h1');
+    const paragraph = document.createElement('h1');
+   
+    text.innerHTML = "It seems like the Outlaws Deadlock are laying in wait for you, aiming to steal your gains from the hunt.";
+    
+    paragraph.innerHTML = "Eliminate all the members to complete your journey.";
+
+
+
+    box.appendChild(text);
+    box.appendChild(paragraph);
+  
+    document.body.appendChild(box);
+
+
+   setTimeout(function() {
+        document.body.removeChild(box);
+        player_alerted = true;
+        
+    }, 6000);
+
+    
+   
+    
+
+
+}
 
 init();

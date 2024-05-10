@@ -84,7 +84,10 @@ export function create_Enemy() {
     const left_glove_geometry = new THREE.SphereGeometry(1);
     const left_glove_material = new THREE.MeshToonMaterial({ color: 0x000000 }); // Preto
     const left_glove = new THREE.Mesh(left_glove_geometry, left_glove_material);
+    left_glove.castShadow = true;
+    left_glove.name = "enemy_left_glove";
     const right_glove = left_glove.clone();
+    right_glove.name = "enemy_right_glove";
     
 
     //Sapatos do inimigo
@@ -98,16 +101,19 @@ export function create_Enemy() {
 
 
     const hat = createObjects("hat",4,8,"game","enemy");
+    hat.scale.set(1.6, 1.6, 1.6);
+    hat.name = "enemy_hat";
 
 
     const revolver =  createObjects("revolver",4,8,"game","enemy");
+    revolver.name = "enemy_revolver";
     revolver.rotation.z = -0.5 * Math.PI ;
     revolver.scale.set(2,2,2);
 
 
 
     
-    hat.scale.set(1.6, 1.6, 1.6);
+   
 
 
     // Definir a posição e orientação dos diferentes elementos do inimigo
@@ -186,6 +192,15 @@ export function create_Enemy() {
     enemy.bullets = 8;
 
     enemy.rotation.y = Math.PI ;
+
+
+    enemy.shoot_sound;
+
+    enemy.can_shoot = true; 
+
+
+
+ 
 
     return enemy;
 

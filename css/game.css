@@ -13,6 +13,12 @@ body {
     100% {opacity: 1;}
   }
 
+@keyframes shot {
+    0% { transform: translateX(0); }
+    50% { transform: translateX(-50px); }
+    100% { transform: translateX(0); }
+  }
+
 
 #back-button{
     position: absolute;
@@ -152,9 +158,10 @@ label {
 #Health{
     position: absolute;
     top: 5%;
-    left: 45%;
+    left: 42%;
     font-size: 30px;
     opacity: 0;
+    font-size: 40px;
 }
 
 
