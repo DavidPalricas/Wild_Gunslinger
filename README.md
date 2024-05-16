@@ -16,6 +16,17 @@ In this mode you can check each level's map.
 You can check the controls for each mode by clicking on the "How to play" button.
 
 
+## Demo
+You can see a demo of the Wild Gunslinger [here](https://youtu.be/3oYhQ_FzjzU)
+
+
+## List of CheatCodes
+ Can only be used in the game mode
+ 1. Django : Switch to the last level
+ 1. Deadeye : Remove time limit
+ 1. Draw : Don't waste bullets
+ 1. GODMODE : Don't lose life
+ 
  ## Technologies used
  This game was made using HTML, CSS, and JavaScript. It used a 3D computer graphics JavaScript library called Three.js.
 
