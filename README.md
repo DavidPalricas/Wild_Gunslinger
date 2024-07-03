@@ -11,7 +11,7 @@ The objective of this mode is to hunt all the animals in each level before you r
 In this mode you can check each level's map.
  
 ## How to play
- You can play the game [here](https://davidpalricas.github.io/)
+ You can play the game [here](https://davidpalricas.github.io/Wild_Gunslinger/)
 
 You can check the controls for each mode by clicking on the "How to play" button.
 
