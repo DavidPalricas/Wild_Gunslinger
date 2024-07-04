@@ -5,7 +5,7 @@ body {
     text-shadow: 5px 5px #191C1F; /* Sombra preta */
     @import url("https://fonts.cdnfonts.com/css/chinese-rocks");
     font-family: 'Chinese Rocks Rg', sans-serif;
-    background-image: url('/assets/img/controls.jpg');
+    background-image: url('../assets/img/controls.jpg');
     background-repeat: no-repeat;
     background-size: cover;
     background-attachment: fixed;
