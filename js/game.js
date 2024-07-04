@@ -934,7 +934,7 @@ function End_game(){
     back_menu.innerHTML = "Back to Menu";
 
     back_menu.onclick = function() {
-        window.location.href = "../index.html";
+        window.location.href = "./index.html";
     }
 
     buttons.appendChild(back_menu);
@@ -1003,7 +1003,7 @@ function Game_Over(){
 
      //Quando o utilizador carrega no botão
     back_menu.onclick = function() {
-        window.location.href = "../index.html";
+        window.location.href = "./index.html";
     }
 
     //Hover
@@ -1049,9 +1049,9 @@ function shoot_target(target){
 
     level != 4 ? score_points = 100 : score_points = 200; //Pontos por matar um animal ou inimigo
 
-    let target_death_sound = "./assets" + target + "_death.mp3";
+    let target_death_sound = "./assets/sounds/" + target + "_death.mp3";
 
-    if (target_death_sound != "./assets") {
+    if (target_death_sound != "./assets/sounds/") {
 
         //Caso outro som de morte esteja a ser reproduzido, parar a reprodução
         if(helper.target_death_sound.isPlaying){
@@ -1448,13 +1448,7 @@ function animate_Enemy(enemy){
     cube.position.set(enemy_revolver.position.x , enemy_revolver.position.y , enemy_revolver.position.z);
 
 
-    console.log(enemy_revolver.position );
-
-    console.log(cube);
-
-
     sceneElements.sceneGraph.add(cube);
-
 
     revolver_shoot_effect(enemy_revolver,"enemy");
 
@@ -1505,8 +1499,6 @@ function animate_Enemy(enemy){
 
 
 function revolver_shoot_effect(revolver,tag){
-
-    console.log("Revolver shoot effect");
     
     const bullet_fired = createObjects("bullet",level, n_bullets,mode);
 
