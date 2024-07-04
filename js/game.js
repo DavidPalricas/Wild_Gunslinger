@@ -1364,7 +1364,7 @@ function switch_rain_snow(){
     if (!israin ) {
         if (level == 2) {
             const audioLoader = new THREE.AudioLoader();
-            audioLoader.load( './assets/rain.mp3', function( buffer ) {
+            audioLoader.load( './assets/sounds/rain.mp3', function( buffer ) {
                 const sound = helper.ambient_sound;
                 sound.setBuffer( buffer );
                 sound.setLoop( true );
