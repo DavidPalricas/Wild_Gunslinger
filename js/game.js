@@ -665,7 +665,7 @@ function Grab_Gun() {
     sceneElements.sceneGraph.add(revolver);
     
     const audioLoader = new THREE.AudioLoader();
-    audioLoader.load( '../sounds/pick_revolver.mp3', function( buffer ) {
+    audioLoader.load( './assets/sounds/pick_revolver.mp3', function( buffer ) {
         const sound = helper.sound;
         sound.setBuffer( buffer );
         sound.setLoop( false );
@@ -687,7 +687,7 @@ function fire_gun(event) {
 
 
             const audioLoader = new THREE.AudioLoader();
-            audioLoader.load( '../sounds/revolver_shot.mp3', function( buffer ) {
+            audioLoader.load( './assets/sounds/revolver_shot.mp3', function( buffer ) {
                 const sound = helper.sound;
                 sound.setBuffer( buffer );
                 sound.setLoop( false );
@@ -777,7 +777,7 @@ function resizeWindow(eventParam) {
 function play_theme(){
 
     const music_loader = new THREE.AudioLoader();
-    music_loader.load( "../sounds/background_music.mp3", function( buffer_music ) {
+    music_loader.load( "./assets/sounds/background_music.mp3", function( buffer_music ) {
         const music = helper.music;
         music.setBuffer( buffer_music );
         music.setLoop(true );
@@ -865,7 +865,7 @@ function End_game(){
     }
             
     //Criar o ecrã de Game Over
-    body.style.backgroundImage = "url('../img/end_game.jpg')";
+    body.style.backgroundImage = "url('./assets/img/end_game.jpg')";
     body.style.backgroundSize = "cover";
     body.style.backgroundRepeat = "no-repeat";
     body.style.color = "white";
@@ -959,7 +959,7 @@ function Game_Over(){
     }
             
             //Criar o ecrã de Game Over
-    body.style.backgroundImage = "url('../img/game_over.jpg')";
+    body.style.backgroundImage = "url('./assets/img/game_over.jpg')";
     body.style.backgroundSize = "cover";
     body.style.backgroundRepeat = "no-repeat";
     body.style.color = "white";
@@ -1030,7 +1030,7 @@ function Game_Over(){
 
 function game_over_theme(){
     const audioLoader = new THREE.AudioLoader();
-    audioLoader.load( "../sounds/game_over.mp3", function( buffer ) {
+    audioLoader.load( "./assets/sounds/game_over.mp3", function( buffer ) {
         const sound = helper.music;
         sound.setBuffer( buffer );
         sound.setLoop( false );
@@ -1049,9 +1049,9 @@ function shoot_target(target){
 
     level != 4 ? score_points = 100 : score_points = 200; //Pontos por matar um animal ou inimigo
 
-    let target_death_sound = "../sounds/" + target + "_death.mp3";
+    let target_death_sound = "./assets" + target + "_death.mp3";
 
-    if (target_death_sound != "../sounds/") {
+    if (target_death_sound != "./assets") {
 
         //Caso outro som de morte esteja a ser reproduzido, parar a reprodução
         if(helper.target_death_sound.isPlaying){
@@ -1364,7 +1364,7 @@ function switch_rain_snow(){
     if (!israin ) {
         if (level == 2) {
             const audioLoader = new THREE.AudioLoader();
-            audioLoader.load( '../sounds/rain.mp3', function( buffer ) {
+            audioLoader.load( './assets/rain.mp3', function( buffer ) {
                 const sound = helper.ambient_sound;
                 sound.setBuffer( buffer );
                 sound.setLoop( true );
@@ -1464,7 +1464,7 @@ function animate_Enemy(enemy){
 
     enemy.bullets--;
     const audioLoader = new THREE.AudioLoader();
-    audioLoader.load( '../sounds/revolver_shot.mp3', function( buffer ) {
+    audioLoader.load( './assets/sounds/revolver_shot.mp3', function( buffer ) {
     const sound = enemy.shoot_sound;
     sound.setBuffer( buffer );
     sound.setLoop( false );
