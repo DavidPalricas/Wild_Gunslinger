@@ -1,7 +1,7 @@
 import * as THREE from "three";
 
 export function createMesh(geom, imageFile) {
-    const texture = new THREE.TextureLoader().load("Wild_Gunslinger/textures/" + imageFile);
+    const texture = new THREE.TextureLoader().load("./assets/wild_gunslinger/textures/" + imageFile);
     texture.minFilter = THREE.LinearFilter; // Ou use outras opções de filtragem
     const material = new THREE.MeshStandardMaterial({ map: texture });
    

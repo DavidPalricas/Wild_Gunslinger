@@ -1,6 +1,5 @@
 body {
     margin: 0;
-    cursor: url('../img/aim.cur'), auto;
     color: #EE0000; /* Vermelho */
     text-shadow: 2px 1px #191C1F; /* Sombra preta */
     @import url("https://fonts.cdnfonts.com/css/chinese-rocks");
