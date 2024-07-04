@@ -181,7 +181,7 @@ function createFox(level) {
     }
     //Cabeça da raposa
     const head_geometry = new THREE.SphereGeometry(2);
-    const head_material = new THREE.MeshPhongMaterial({ color: fox_pur}); // Laranja
+    const head_material = new THREE.MeshPhongMaterial({ color: fox_pur}); 
     const head = new THREE.Mesh(head_geometry, head_material);
     head.name = "fox_head";
     head.castShadow = true;
